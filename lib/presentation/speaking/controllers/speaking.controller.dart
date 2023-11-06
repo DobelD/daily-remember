@@ -9,6 +9,8 @@ import 'package:dailyremember/presentation/speaking/widget/player_bar.dart';
 import 'package:dailyremember/presentation/speaking/widget/save_dialog.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_slidable_panel/controllers/slide_controller.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:hive/hive.dart';
@@ -19,13 +21,18 @@ import '../widget/add_target.dart';
 import '../widget/menu_record.dart';
 
 class SpeakingController extends GetxController {
+  final SlideController slideController = SlideController(
+      usePreActionController: true, usePostActionController: true);
+
   TextEditingController targetController = TextEditingController();
   RecorderController recordController = RecorderController();
   PlayerController playerController = PlayerController();
   a.AudioPlayer audioPlayer = a.AudioPlayer();
   late Box<SpeakingModel> box;
+  var speakingData = <SpeakingModel>[].obs;
   final storage = GetStorage();
 
+  var isOpenFloating = false.obs;
   var seconds = 0.obs;
   var minutes = 0.obs;
   var isRunning = false.obs;
@@ -39,6 +46,12 @@ class SpeakingController extends GetxController {
   var recordingsAudio = <Map<String, dynamic>>[].obs;
   String? currentRecordingPath;
   Uint8List? audioData;
+
+  Future<void> loadSpeakingData() async {
+    var box = await Hive.openBox<SpeakingModel>('speakings');
+    final sepaking = box.values.toList().cast<SpeakingModel>();
+    speakingData.assignAll(sepaking);
+  }
 
   Future<void> openMenuRecord(int index) async {
     isSave.value = false;
@@ -132,6 +145,7 @@ class SpeakingController extends GetxController {
     Get.defaultDialog(
         radius: 8,
         title: "Save Recording?",
+        titleStyle: titleBold,
         content: SaveDialog(
           onPressed: () => saveRecording(),
         )).whenComplete(() {
@@ -146,8 +160,11 @@ class SpeakingController extends GetxController {
     if (currentRecordingPath != null) {
       recordController.stop();
       var box = await Hive.openBox<SpeakingModel>('speakings');
-      var speakingModel = SpeakingModel(titleController.text,
-          currentRecordingPath ?? '', DateTime.timestamp().toString());
+      var speakingModel = SpeakingModel(
+          titleController.text,
+          currentRecordingPath ?? '',
+          '${minutes.value.toString().padLeft(2, '0')}:${seconds.value.toString().padLeft(2, '0')}',
+          DateTime.timestamp().toString());
       box.add(speakingModel);
       // ignore: avoid_print
       print("Rekaman disimpan.");
@@ -157,6 +174,7 @@ class SpeakingController extends GetxController {
       isPlaying.clear();
       isPlaying.value =
           List.generate(box.values.length, (index) => false).toList();
+      loadSpeakingData();
       Get.back();
       Get.back();
     } else {
@@ -262,12 +280,53 @@ class SpeakingController extends GetxController {
     });
   }
 
+  void deleteSpeaking(int index, String audioPath) {
+    Get.defaultDialog(
+        title: "Delete Speaking",
+        titleStyle: titleBold,
+        middleText: "Apakah anda yakin menghapus rekaman speaking?",
+        middleTextStyle: subTitleNormal,
+        titlePadding: const EdgeInsets.only(top: 12),
+        contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+        radius: 8.r,
+        actions: [
+          TextButton(
+              onPressed: () => Get.back(),
+              child: Text(
+                'No',
+                style: hintSubTitleBold,
+              )),
+          TextButton(
+              onPressed: () => deleteAction(index, audioPath),
+              child: Text(
+                'Yes',
+                style: subTitleBold,
+              ))
+        ]);
+  }
+
+  void deleteAction(int index, String audioPath) {
+    if (index >= 0 && index < box.length) {
+      box.deleteAt(index);
+      File(audioPath).delete();
+      loadSpeakingData();
+      Get.back();
+    }
+  }
+
   @override
   void onInit() {
     box = Hive.box<SpeakingModel>('speakings');
     isPlaying.value =
         List.generate(box.values.length, (index) => false).toList();
+    loadSpeakingData();
     super.onInit();
+  }
+
+  @override
+  void onClose() {
+    slideController.dispose();
+    super.onClose();
   }
 
   void onResumeStopRecord() {

@@ -13,7 +13,7 @@ class MainPageController extends GetxController {
         : index == 2
             ? "Dictionary"
             : "Progess";
-    if (index != 2) {
+    if (index != 2 && index != 3) {
       tabIndex = index;
       update();
       if (index == 3) {

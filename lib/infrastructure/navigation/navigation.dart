@@ -61,5 +61,10 @@ class Nav {
       page: () => const DictionaryScreen(),
       binding: DictionaryControllerBinding(),
     ),
+    GetPage(
+      name: Routes.SPEAKING_TIMER,
+      page: () => const SpeakingTimerScreen(),
+      binding: SpeakingTimerControllerBinding(),
+    ),
   ];
 }

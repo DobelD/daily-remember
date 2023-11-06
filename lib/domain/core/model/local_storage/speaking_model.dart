@@ -9,6 +9,8 @@ class SpeakingModel extends HiveObject {
   @HiveField(1)
   late String audioPath;
   @HiveField(2)
+  late String duration;
+  @HiveField(3)
   late String createdAt;
-  SpeakingModel(this.title, this.audioPath, this.createdAt);
+  SpeakingModel(this.title, this.audioPath, this.duration, this.createdAt);
 }
