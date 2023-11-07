@@ -146,6 +146,8 @@ class SpeakingTimerController extends GetxController {
           titleController.text,
           currentRecordingPath ?? '',
           saveDurationSpeaking.value,
+          "",
+          "",
           DateTime.timestamp().toString());
       box.add(speakingModel);
       // ignore: avoid_print

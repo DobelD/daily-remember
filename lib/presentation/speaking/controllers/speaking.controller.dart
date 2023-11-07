@@ -27,6 +27,7 @@ class SpeakingController extends GetxController {
   TextEditingController targetController = TextEditingController();
   RecorderController recordController = RecorderController();
   PlayerController playerController = PlayerController();
+
   a.AudioPlayer audioPlayer = a.AudioPlayer();
   late Box<SpeakingModel> box;
   var speakingData = <SpeakingModel>[].obs;
@@ -47,12 +48,15 @@ class SpeakingController extends GetxController {
   String? currentRecordingPath;
   Uint8List? audioData;
 
+// Load data speaking from local storage
+
   Future<void> loadSpeakingData() async {
     var box = await Hive.openBox<SpeakingModel>('speakings');
     final sepaking = box.values.toList().cast<SpeakingModel>();
     speakingData.assignAll(sepaking);
   }
 
+// Open menu record
   Future<void> openMenuRecord(int index) async {
     isSave.value = false;
     isStop.value = false;
@@ -68,14 +72,7 @@ class SpeakingController extends GetxController {
     }
   }
 
-  // Future<void> startRecord() async {
-  //   final hasPermission = await recordController.checkPermission();
-  //   final directory = await getApplicationDocumentsDirectory();
-  //   final filePath = '${directory.path}/recording.mp3';
-  //   if (hasPermission) {
-  //     await recordController.record(path: filePath);
-  //   }
-  // }
+  // Start counter time
 
   void startTimer() {
     if (!isRunning.value) {
@@ -96,10 +93,12 @@ class SpeakingController extends GetxController {
     }
   }
 
+// Stop counter time
   void stopTimer() {
     isRunning.value = false;
   }
 
+// Reset time
   void resetTimer() {
     isRunning.value = false;
     seconds.value = 0;
@@ -160,10 +159,13 @@ class SpeakingController extends GetxController {
     if (currentRecordingPath != null) {
       recordController.stop();
       var box = await Hive.openBox<SpeakingModel>('speakings');
+      String convidence = "";
       var speakingModel = SpeakingModel(
           titleController.text,
           currentRecordingPath ?? '',
           '${minutes.value.toString().padLeft(2, '0')}:${seconds.value.toString().padLeft(2, '0')}',
+          "",
+          convidence,
           DateTime.timestamp().toString());
       box.add(speakingModel);
       // ignore: avoid_print

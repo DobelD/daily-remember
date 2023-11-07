@@ -1,5 +1,6 @@
 import 'package:dailyremember/infrastructure/theme/typography.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconly/iconly.dart';
 
 class AppForm extends StatefulWidget {
@@ -32,7 +33,7 @@ class _AppFormState extends State<AppForm> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 42,
+      height: 46.h,
       child: TextFormField(
         controller: widget.controller,
         style: titleNormal,

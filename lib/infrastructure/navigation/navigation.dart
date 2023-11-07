@@ -9,7 +9,7 @@ import 'routes.dart';
 
 class EnvironmentsBadge extends StatelessWidget {
   final Widget child;
-  EnvironmentsBadge({required this.child});
+  const EnvironmentsBadge({super.key, required this.child});
   @override
   Widget build(BuildContext context) {
     var env = ConfigEnvironments.getEnvironments()['env'];
@@ -65,6 +65,16 @@ class Nav {
       name: Routes.SPEAKING_TIMER,
       page: () => const SpeakingTimerScreen(),
       binding: SpeakingTimerControllerBinding(),
+    ),
+    GetPage(
+      name: Routes.LOGIN,
+      page: () => const LoginScreen(),
+      binding: LoginControllerBinding(),
+    ),
+    GetPage(
+      name: Routes.REGISTER,
+      page: () => const RegisterScreen(),
+      binding: RegisterControllerBinding(),
     ),
   ];
 }

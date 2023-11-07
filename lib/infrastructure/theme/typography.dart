@@ -17,6 +17,12 @@ TextStyle get primaryTitleNormal => GoogleFonts.inter(
     fontSize: 14.sp, color: Colors.blue, fontWeight: FontWeight.normal);
 TextStyle get primaryTitleBold => GoogleFonts.inter(
     fontSize: 14.sp, color: Colors.blue, fontWeight: FontWeight.bold);
+TextStyle get primarySubTitleRegular => GoogleFonts.inter(
+    fontSize: 12.sp, color: Colors.blue, fontWeight: FontWeight.w400);
+TextStyle get primarySubTitleNormal => GoogleFonts.inter(
+    fontSize: 12.sp, color: Colors.blue, fontWeight: FontWeight.normal);
+TextStyle get primarySubTitleBold => GoogleFonts.inter(
+    fontSize: 12.sp, color: Colors.blue, fontWeight: FontWeight.bold);
 TextStyle get whiteTitleRegular => GoogleFonts.inter(
     fontSize: 14.sp, color: Colors.white, fontWeight: FontWeight.w400);
 TextStyle get whiteTitleNormal => GoogleFonts.inter(

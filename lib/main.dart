@@ -12,11 +12,14 @@ import 'infrastructure/navigation/navigation.dart';
 import 'infrastructure/navigation/routes.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 
+import 'utils/preference/app_preference.dart';
+
 void main() async {
   var initialRoute = await Routes.initialRoute;
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  await GetStorage.init();
+  await AppPreference.initialize();
+
   final appDocumentDirectory =
       await path_provider.getApplicationDocumentsDirectory();
   Hive.init(appDocumentDirectory.path);

@@ -72,6 +72,8 @@ class ListRecording extends StatelessWidget {
                           trailing: Obx(() {
                             return IconButton(
                               onPressed: () {
+                                print(data.text);
+                                print(data.convidence);
                                 controller.openPlayingBar(
                                     data.audioPath, index);
                               },

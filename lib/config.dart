@@ -6,7 +6,7 @@ class Environments {
 }
 
 class ConfigEnvironments {
-  static const String _currentEnvironments = Environments.DEV;
+  static const String _currentEnvironments = Environments.QAS;
   static final List<Map<String, String>> _availableEnvironments = [
     {
       'env': Environments.LOCAL,
@@ -18,7 +18,7 @@ class ConfigEnvironments {
     },
     {
       'env': Environments.QAS,
-      'url': '',
+      'url': 'https://9e0a-36-73-252-39.ngrok-free.app/api/',
     },
     {
       'env': Environments.PRODUCTION,

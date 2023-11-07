@@ -5,11 +5,14 @@ class Routes {
   }
 
   static const ADD_WORD = '/add-word';
+  static const AUTHLOGIN = '/authlogin';
   static const DICTIONARY = '/dictionary';
   static const HOME = '/home';
+  static const LOGIN = '/login';
   static const MAIN_PAGE = '/main-page';
   static const PROGRESS = '/progress';
   static const SPEAKING = '/speaking';
-  static const SPLASH_SCREEN = '/splash-screen';
   static const SPEAKING_TIMER = '/speaking-timer';
+  static const SPLASH_SCREEN = '/splash-screen';
+  static const REGISTER = '/register';
 }

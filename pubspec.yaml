@@ -33,6 +33,7 @@ dependencies:
     git:
       url: https://github.com/apgapg/avatar_glow
       ref: master
+  speech_to_text: ^6.4.0
 
 dev_dependencies: 
   flutter_lints: ^2.0.0
@@ -46,4 +47,6 @@ flutter:
 
   assets:
     - assets/json/
+    - assets/images/
+
 

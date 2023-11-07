@@ -8,7 +8,7 @@ part of 'speaking_model.dart';
 
 class SpeakingModelAdapter extends TypeAdapter<SpeakingModel> {
   @override
-  final int typeId = 0;
+  final int typeId = 1;
 
   @override
   SpeakingModel read(BinaryReader reader) {
@@ -21,13 +21,15 @@ class SpeakingModelAdapter extends TypeAdapter<SpeakingModel> {
       fields[1] as String,
       fields[2] as String,
       fields[3] as String,
+      fields[4] as String,
+      fields[5] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, SpeakingModel obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.title)
       ..writeByte(1)
@@ -35,6 +37,10 @@ class SpeakingModelAdapter extends TypeAdapter<SpeakingModel> {
       ..writeByte(2)
       ..write(obj.duration)
       ..writeByte(3)
+      ..write(obj.text)
+      ..writeByte(4)
+      ..write(obj.convidence)
+      ..writeByte(5)
       ..write(obj.createdAt);
   }
 

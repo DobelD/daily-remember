@@ -1,4 +1,6 @@
 export 'package:dailyremember/presentation/add_word/add_word.screen.dart';
+export 'package:dailyremember/presentation/auth/login/login.screen.dart';
+export 'package:dailyremember/presentation/auth/register/register.screen.dart';
 export 'package:dailyremember/presentation/dictionary/dictionary.screen.dart';
 export 'package:dailyremember/presentation/home/home.screen.dart';
 export 'package:dailyremember/presentation/main_page/main_page.screen.dart';
