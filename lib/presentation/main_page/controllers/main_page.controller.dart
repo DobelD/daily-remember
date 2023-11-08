@@ -12,8 +12,8 @@ class MainPageController extends GetxController {
         ? "Speaking"
         : index == 2
             ? "Dictionary"
-            : "Progess";
-    if (index != 2 && index != 3) {
+            : "Account";
+    if (index != 2) {
       tabIndex = index;
       update();
       if (index == 3) {
@@ -35,14 +35,14 @@ class MainPageController extends GetxController {
     const HomeScreen(),
     const SpeakingScreen(),
     const DictionaryScreen(),
-    const ProgressScreen()
+    const AccountScreen()
   ];
 
   List<Map<String, dynamic>> listIcon = [
     {"label": "Home", "icon": IconlyBold.home},
     {"label": "Speaking", "icon": IconlyBold.voice_2},
     {"label": "Dictionary", "icon": IconlyBold.document},
-    {"label": "Progress", "icon": IconlyBold.graph}
+    {"label": "Profile", "icon": IconlyBold.profile}
   ];
 
   changeDataProgress() {

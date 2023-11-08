@@ -1,4 +1,9 @@
+import 'package:dailyremember/presentation/auth/register/section/button_register_section.dart';
+import 'package:dailyremember/presentation/auth/register/section/footer_register_section.dart';
+import 'package:dailyremember/presentation/auth/register/section/form_register_section.dart';
+import 'package:dailyremember/presentation/auth/register/section/header_register_section.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
 
@@ -9,16 +14,17 @@ class RegisterScreen extends GetView<RegisterController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('RegisterScreen'),
-        centerTitle: true,
-      ),
-      body: const Center(
-        child: Text(
-          'RegisterScreen is working',
-          style: TextStyle(fontSize: 20),
+      body: SafeArea(
+        child: ListView(
+          padding: EdgeInsets.all(16.r),
+          children: [
+            const HeaderRegisterSection(),
+            FormRegisterSection(controller: controller),
+            ButtonRegisterSection(controller: controller)
+          ],
         ),
       ),
+      bottomNavigationBar: const FooterRegisterSection(),
     );
   }
 }

@@ -2,6 +2,9 @@ import 'package:dailyremember/components/app_form.dart';
 import 'package:dailyremember/presentation/auth/login/controllers/login.controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+
+import '../widget/autocomplite_form.dart';
 
 class FormLoginSection extends StatelessWidget {
   const FormLoginSection({super.key, required this.controller});
@@ -10,19 +13,22 @@ class FormLoginSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        AppForm(
-          controller: controller.emailController,
-          hintText: "Email...",
-        ),
-        SizedBox(height: 12.h),
-        AppForm(
-          controller: controller.passwordController,
-          hintText: "Password...",
-        ),
-        SizedBox(height: 4.h),
-      ],
-    );
+    return GetBuilder<LoginController>(builder: (controller) {
+      return Column(
+        children: [
+          // AppForm(
+          //   controller: controller.emailController,
+          //   hintText: "Email...",
+          // ),
+          const AutocompliteForm(),
+          SizedBox(height: 12.h),
+          AppForm.password(
+            controller: controller.passwordController,
+            hintText: "Password...",
+          ),
+          SizedBox(height: 4.h),
+        ],
+      );
+    });
   }
 }

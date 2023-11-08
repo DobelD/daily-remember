@@ -14,12 +14,32 @@ class ButtonLoginSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Align(
-            alignment: Alignment.bottomRight,
-            child: TextButton(
+        Row(
+          children: [
+            Obx(() {
+              return SizedBox(
+                height: 26.r,
+                width: 26.r,
+                child: Checkbox(
+                  value: controller.rememberMe.value,
+                  onChanged: (remember) => controller.chengeRemember(remember),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(3.r)),
+                  side: BorderSide(color: Colors.grey.shade400, width: 1),
+                  tristate: false,
+                  visualDensity: VisualDensity.adaptivePlatformDensity,
+                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+              );
+            }),
+            SizedBox(width: 6.w),
+            Text('Remember me', style: subTitleNormal),
+            const Spacer(),
+            TextButton(
                 onPressed: () => controller.forgotPassword(),
-                child:
-                    Text('Forgot password ?', style: primarySubTitleNormal))),
+                child: Text('Forgot password ?', style: primarySubTitleNormal)),
+          ],
+        ),
         SizedBox(height: 4.h),
         Row(
           children: [

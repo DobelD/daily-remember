@@ -11,8 +11,9 @@ class Routes {
   static const LOGIN = '/login';
   static const MAIN_PAGE = '/main-page';
   static const PROGRESS = '/progress';
+  static const REGISTER = '/register';
   static const SPEAKING = '/speaking';
   static const SPEAKING_TIMER = '/speaking-timer';
   static const SPLASH_SCREEN = '/splash-screen';
-  static const REGISTER = '/register';
+  static const ACCOUNT = '/account';
 }

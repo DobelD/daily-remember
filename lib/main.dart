@@ -5,9 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:hive/hive.dart';
 
+import 'domain/core/model/local_storage/auth_model.dart';
 import 'infrastructure/navigation/navigation.dart';
 import 'infrastructure/navigation/routes.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
@@ -23,6 +23,8 @@ void main() async {
   final appDocumentDirectory =
       await path_provider.getApplicationDocumentsDirectory();
   Hive.init(appDocumentDirectory.path);
+  Hive.registerAdapter<AuthModel>(AuthModelAdapter());
+  await Hive.openBox<AuthModel>('auth');
   Hive.registerAdapter<SpeakingModel>(SpeakingModelAdapter());
   await Hive.openBox<SpeakingModel>('speakings');
   Hive.registerAdapter<VocabularyModel>(VocabularyModelAdapter());

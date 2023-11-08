@@ -1,3 +1,4 @@
+import 'package:dailyremember/components/app_snackbar.dart';
 import 'package:dailyremember/domain/core/interfaces/auth_repository.dart';
 import 'package:dailyremember/domain/core/model/params/register_param.dart';
 import 'package:flutter/material.dart';
@@ -20,19 +21,41 @@ class RegisterController extends GetxController {
 
   Future<void> registerWithApi() async {
     registerStatus(RegisterStatus.loading);
+    bool validatedForm = nameController.text.isNotEmpty &&
+        usernameController.text.isNotEmpty &&
+        emailController.text.isNotEmpty &&
+        phoneNumberController.text.isNotEmpty &&
+        passwordController.text.isNotEmpty &&
+        confirmPasswordController.text.isNotEmpty;
+    bool validatedPassword =
+        passwordController.text == confirmPasswordController.text;
     var param = RegisterParam(
         name: nameController.text,
         username: usernameController.text,
         email: emailController.text,
         phoneNumber: phoneNumberController.text,
         password: passwordController.text);
-    if (passwordController.text == confirmPasswordController.text) {
-      final res = await _authRepository.registerWithApi(param);
-      if (res != null) {
-        registerStatus(RegisterStatus.success);
+    // ignore: unnecessary_null_comparison
+    if (validatedForm) {
+      if (validatedPassword) {
+        final res = await _authRepository.registerWithApi(param);
+        if (res != null) {
+          nameController.clear();
+          usernameController.clear();
+          emailController.clear();
+          phoneNumberController.clear();
+          confirmPasswordController.clear();
+          registerStatus(RegisterStatus.success);
+          AppSnackbar.success(message: "Success registered account!");
+        }
+        registerStatus(RegisterStatus.failed);
+      } else {
+        AppSnackbar.error(message: "Password not same");
+        registerStatus(RegisterStatus.failed);
       }
+    } else {
+      AppSnackbar.error(message: "All field is required!");
       registerStatus(RegisterStatus.failed);
     }
-    registerStatus(RegisterStatus.failed);
   }
 }

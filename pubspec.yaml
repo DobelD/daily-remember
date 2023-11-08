@@ -34,6 +34,8 @@ dependencies:
       url: https://github.com/apgapg/avatar_glow
       ref: master
   speech_to_text: ^6.4.0
+  substring_highlight: ^1.0.33
+  local_auth: ^2.1.7
 
 dev_dependencies: 
   flutter_lints: ^2.0.0

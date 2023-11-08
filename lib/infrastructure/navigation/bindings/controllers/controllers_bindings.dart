@@ -1,3 +1,4 @@
+export 'package:dailyremember/infrastructure/navigation/bindings/controllers/account.controller.binding.dart'; 
 export 'package:dailyremember/infrastructure/navigation/bindings/controllers/add_word.controller.binding.dart';
 export 'package:dailyremember/infrastructure/navigation/bindings/controllers/dictionary.controller.binding.dart';
 export 'package:dailyremember/infrastructure/navigation/bindings/controllers/home.controller.binding.dart';

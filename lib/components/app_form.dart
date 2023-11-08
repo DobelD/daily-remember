@@ -10,36 +10,73 @@ class AppForm extends StatefulWidget {
       this.hintText,
       this.onChanged,
       this.keyboardType,
-      this.isSearch = false});
+      this.isPassword = false,
+      this.isSearch = false,
+      this.focusNode,
+      this.onEditingComplete});
   const AppForm.search(
       {super.key,
       this.controller,
       this.hintText,
       this.onChanged,
       this.keyboardType,
-      this.isSearch = true});
+      this.isPassword = false,
+      this.isSearch = true,
+      this.focusNode,
+      this.onEditingComplete});
+  const AppForm.password(
+      {super.key,
+      this.controller,
+      this.hintText,
+      this.onChanged,
+      this.keyboardType,
+      this.isPassword = true,
+      this.isSearch = false,
+      this.focusNode,
+      this.onEditingComplete});
 
   final TextEditingController? controller;
   final String? hintText;
   final bool isSearch;
+  final bool isPassword;
   final TextInputType? keyboardType;
+  final FocusNode? focusNode;
   final Function(String)? onChanged;
+  final Function()? onEditingComplete;
 
   @override
   State<AppForm> createState() => _AppFormState();
 }
 
 class _AppFormState extends State<AppForm> {
+  bool isObsecure = false;
+  void showPassword() {
+    setState(() {
+      isObsecure = !isObsecure;
+    });
+  }
+
+  @override
+  void initState() {
+    isObsecure = widget.isPassword;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 46.h,
       child: TextFormField(
+        focusNode: widget.focusNode,
         controller: widget.controller,
         style: titleNormal,
         cursorColor: Colors.blueAccent,
         onChanged: widget.onChanged,
         keyboardType: widget.keyboardType,
+        obscureText: isObsecure,
+        autocorrect: false,
+        enableSuggestions: false,
+        onEditingComplete: widget.onEditingComplete,
         decoration: InputDecoration(
             hintText: widget.hintText,
             hintStyle: hintTitleNormal,
@@ -55,6 +92,14 @@ class _AppFormState extends State<AppForm> {
                 : null,
             prefixIconConstraints:
                 const BoxConstraints(maxWidth: 50, minWidth: 40),
+            suffixIcon: widget.isPassword
+                ? IconButton(
+                    onPressed: showPassword,
+                    icon: Icon(
+                      isObsecure ? Icons.visibility_off : Icons.visibility,
+                      size: 20.w,
+                    ))
+                : null,
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: 12, vertical: 4)),
       ),

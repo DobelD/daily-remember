@@ -1,3 +1,4 @@
+export 'package:dailyremember/presentation/account/account.screen.dart';
 export 'package:dailyremember/presentation/add_word/add_word.screen.dart';
 export 'package:dailyremember/presentation/auth/login/login.screen.dart';
 export 'package:dailyremember/presentation/auth/register/register.screen.dart';

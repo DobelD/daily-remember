@@ -19,7 +19,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:hive/hive.dart';
 
 import '../../../infrastructure/navigation/routes.dart';
-import '../widget/player_bar.dart';
+// import '../widget/player_bar.dart';
 
 enum HomeStatus { initial, loading, success, failed }
 

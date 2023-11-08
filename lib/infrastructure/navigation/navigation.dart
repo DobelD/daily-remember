@@ -76,5 +76,10 @@ class Nav {
       page: () => const RegisterScreen(),
       binding: RegisterControllerBinding(),
     ),
+    GetPage(
+      name: Routes.ACCOUNT,
+      page: () => const AccountScreen(),
+      binding: AccountControllerBinding(),
+    ),
   ];
 }

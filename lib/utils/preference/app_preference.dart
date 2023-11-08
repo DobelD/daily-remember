@@ -36,7 +36,7 @@ class AppPreference {
   }
 
   Future<void> clearLocalStorage() async {
-    await _storage.remove(_userModelKey);
+    // await _storage.remove(_userModelKey);
     await _storage.remove(_accessTokenKey);
   }
 }
