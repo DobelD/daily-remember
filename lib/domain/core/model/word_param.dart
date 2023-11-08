@@ -1,7 +1,6 @@
 class WordParam {
   const WordParam({
     required this.indonesia,
-    required this.english,
     this.remember = false,
     this.verbOne,
     this.verbTwo,
@@ -10,7 +9,6 @@ class WordParam {
   });
 
   final String indonesia;
-  final String english;
   final bool remember;
   final String? verbOne;
   final String? verbTwo;
@@ -19,7 +17,6 @@ class WordParam {
 
   Map<String, dynamic> toMap() => {
         'indonesia': indonesia,
-        'english': english,
         'remember': remember,
         'verb_one': verbOne,
         'verb_two': verbTwo,

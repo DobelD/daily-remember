@@ -1,7 +1,6 @@
 class WordModel {
   int? id;
   String? indonesia;
-  String? english;
   bool? remember;
   String? verbOne;
   String? verbTwo;
@@ -13,7 +12,6 @@ class WordModel {
   WordModel(
       {this.id,
       this.indonesia,
-      this.english,
       this.remember,
       this.verbOne,
       this.verbTwo,
@@ -25,7 +23,6 @@ class WordModel {
   WordModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     indonesia = json['indonesia'];
-    english = json['english'];
     remember = json['remember'];
     verbOne = json['verb_one'];
     verbTwo = json['verb_two'];
@@ -39,7 +36,6 @@ class WordModel {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['indonesia'] = indonesia;
-    data['english'] = english;
     data['remember'] = remember;
     data['verb_one'] = verbOne;
     data['verb_two'] = verbTwo;

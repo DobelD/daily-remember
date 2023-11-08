@@ -150,8 +150,8 @@ class HomeController extends GetxController {
 
   List<WordModel> sortEnglishWordByAlphabet(List<WordModel> word) {
     word.sort((a, b) {
-      final firstLetterA = a.english?[0].toUpperCase() ?? '';
-      final firstLetterB = b.english?[0].toUpperCase() ?? '';
+      final firstLetterA = a.verbOne?[0].toUpperCase() ?? '';
+      final firstLetterB = b.verbOne?[0].toUpperCase() ?? '';
       return firstLetterA.compareTo(firstLetterB);
     });
     return word;
@@ -173,7 +173,7 @@ class HomeController extends GetxController {
           .toList(); // Kembalikan data awal jika query kosong
     } else {
       wordsEnglish.value = _initialWordsEnglish.where((word) {
-        final lowercaseWord = word.english!.toLowerCase();
+        final lowercaseWord = word.verbOne!.toLowerCase();
         return lowercaseWord.contains(query.toLowerCase());
       }).toList();
     }
@@ -185,17 +185,14 @@ class HomeController extends GetxController {
           .toList(); // Kembalikan data awal jika query kosong
     } else {
       wordsIndonesia.value = _initialWordsIndonesia.where((word) {
-        final lowercaseWord = word.english!.toLowerCase();
+        final lowercaseWord = word.verbOne!.toLowerCase();
         return lowercaseWord.contains(query.toLowerCase());
       }).toList();
     }
   }
 
   openDialogRemembered(WordModel data) {
-    var param = WordParam(
-        indonesia: data.indonesia ?? '',
-        english: data.english ?? '',
-        remember: true);
+    var param = WordParam(indonesia: data.indonesia ?? '', remember: true);
     Get.dialog(DialogConfirmationRemembered(
       data: param,
       id: data.id ?? 0,
@@ -228,13 +225,13 @@ class HomeController extends GetxController {
 
     bool isCheck = vocabulary.any((e) {
       switch (index) {
-        case 1:
+        case 0:
           return e.verbOne.getTextBetween("vocabulary-", ".acc") == name;
-        case 2:
+        case 1:
           return e.verbTwo.getTextBetween("vocabulary-", ".acc") == name;
-        case 3:
+        case 2:
           return e.verbThree.getTextBetween("vocabulary-", ".acc") == name;
-        case 4:
+        case 3:
           return e.verbIng.getTextBetween("vocabulary-", ".acc") == name;
         default:
           return false;

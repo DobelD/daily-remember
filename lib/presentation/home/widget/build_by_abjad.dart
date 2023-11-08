@@ -12,13 +12,13 @@ Widget buildOnSortEnglishByAbjad(
         // ignore: invalid_use_of_protected_member
         controller.wordsEnglish.value)[index];
 
-    final firstLetter = data.english?[0].toUpperCase() ?? '';
+    final firstLetter = data.verbOne?[0].toUpperCase() ?? '';
 
     if (index > 0) {
       final prevData = controller.sortEnglishWordByAlphabet(
           // ignore: invalid_use_of_protected_member
           controller.wordsEnglish.value)[index - 1];
-      prevFirstLetter = prevData.english?[0].toUpperCase() ?? '';
+      prevFirstLetter = prevData.verbOne?[0].toUpperCase() ?? '';
     }
 
     if (firstLetter != prevFirstLetter) {
@@ -28,7 +28,7 @@ Widget buildOnSortEnglishByAbjad(
         final nextData = controller.sortEnglishWordByAlphabet(
             // ignore: invalid_use_of_protected_member
             controller.wordsEnglish.value)[i];
-        final nextFirstLetter = nextData.english?[0].toUpperCase() ?? '';
+        final nextFirstLetter = nextData.verbOne?[0].toUpperCase() ?? '';
         if (nextFirstLetter == firstLetter) {
           abjadCount++;
         } else {

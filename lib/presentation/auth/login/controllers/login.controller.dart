@@ -125,8 +125,10 @@ class LoginController extends GetxController {
   Future<void> loadAuthData() async {
     var box = await Hive.openBox<AuthModel>('auth');
     final data = box.get('authData');
-    authData.add(data!);
-    update();
+    if (data != null) {
+      authData.add(data);
+      update();
+    }
   }
 
   void selectedEmail(AuthModel value) {

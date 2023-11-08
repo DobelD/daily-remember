@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:dailyremember/components/app_snackbar.dart';
 import 'package:dailyremember/domain/core/model/word_model.dart';
 import 'package:dailyremember/domain/core/model/word_param.dart';
 import 'package:dailyremember/presentation/add_word/widget/menu_record.dart';
@@ -30,7 +31,6 @@ class AddWordController extends GetxController {
   final audioPlayer = AudioPlayer();
   TextEditingController titleController = TextEditingController();
   late TextEditingController indonesia;
-  late TextEditingController english;
   late TextEditingController remember;
   late TextEditingController verbOne;
   late TextEditingController verbTwo;
@@ -67,38 +67,35 @@ class AddWordController extends GetxController {
     addWordStatus(AddWordStatus.loading);
     var params = WordParam(
         indonesia: indonesia.text.trim(),
-        english: english.text.trim(),
         remember: data?.remember ?? false,
         verbOne: verbOne.text.trim(),
         verbTwo: verbTwo.text.trim(),
         verbThree: verbThree.text.trim(),
         verbIng: verbIng.text.trim());
     if (isRedordingDone.every((element) => element)) {
-      print("Semua elemen adalah true");
+      final res = Get.arguments['type'] != "update"
+          ? await _wordRepository.createWord(params)
+          : await _wordRepository.updateWord(params, data?.id ?? 0);
+      if (verbOne.text.isNotEmpty ||
+          verbTwo.text.isNotEmpty ||
+          verbThree.text.isNotEmpty ||
+          verbIng.text.isNotEmpty) {
+        saveRecording();
+      }
+      if (res != null) {
+        addWordStatus(AddWordStatus.success);
+        doneAction.value = true;
+        clearForm();
+      }
     } else {
-      print("Tidak semua elemen adalah true");
+      AppSnackbar.error(message: "Audio is required!");
     }
-    // final res = Get.arguments['type'] != "update"
-    //     ? await _wordRepository.createWord(params)
-    //     : await _wordRepository.updateWord(params, data?.id ?? 0);
-    // if (verbOne.text.isNotEmpty ||
-    //     verbTwo.text.isNotEmpty ||
-    //     verbThree.text.isNotEmpty ||
-    //     verbIng.text.isNotEmpty) {
-    //   saveRecording();
-    // }
-    // if (res != null) {
-    //   addWordStatus(AddWordStatus.success);
-    //   doneAction.value = true;
 
-    //   clearForm();
-    // }
-    // addWordStatus(AddWordStatus.failed);
+    addWordStatus(AddWordStatus.failed);
   }
 
   clearForm() {
     indonesia.clear();
-    english.clear();
     verbOne.clear();
     verbTwo.clear();
     verbThree.clear();
@@ -111,7 +108,6 @@ class AddWordController extends GetxController {
     }
     if (Get.arguments['type'] == "update") {
       indonesia = TextEditingController(text: data?.indonesia);
-      english = TextEditingController(text: data?.english);
       verbOne = TextEditingController(text: data?.verbOne);
       verbTwo = TextEditingController(text: data?.verbTwo);
       verbThree = TextEditingController(text: data?.verbThree);
@@ -123,7 +119,6 @@ class AddWordController extends GetxController {
           .toList();
     } else {
       indonesia = TextEditingController(text: "");
-      english = TextEditingController(text: "");
       verbOne = TextEditingController(text: "");
       verbTwo = TextEditingController(text: "");
       verbThree = TextEditingController(text: "");
@@ -140,6 +135,7 @@ class AddWordController extends GetxController {
   }
 
   openMenuRecord(int index) async {
+    isRedordingDone[index] = true;
     currentIndex.value = index;
     isSave.value = false;
     isStop.value = false;

@@ -65,46 +65,46 @@ class ButtonLoginSection extends StatelessWidget {
           ],
         ),
         SizedBox(height: 32.h),
-        Row(
-          children: [
-            Expanded(
-                child: Divider(
-              height: 0,
-              color: Colors.grey.shade200,
-              thickness: 1.1,
-            )),
-            Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.w),
-                child: Text(
-                  'Or Sign In With',
-                  style: hintSubTitleNormal,
-                )),
-            Expanded(
-                child: Divider(
-              height: 0,
-              color: Colors.grey.shade200,
-              thickness: 1.1,
-            ))
-          ],
-        ),
-        SizedBox(height: 32.h),
-        Row(
-          children: [
-            Expanded(
-              flex: 5,
-              child: CustomButton.google(
-                onTap: () => controller.loginWithGoogle(),
-              ),
-            ),
-            SizedBox(width: 8.w),
-            Expanded(
-              flex: 5,
-              child: CustomButton.facebook(
-                onTap: () => controller.loginWithFacebook(),
-              ),
-            ),
-          ],
-        )
+        // Row(
+        //   children: [
+        //     Expanded(
+        //         child: Divider(
+        //       height: 0,
+        //       color: Colors.grey.shade200,
+        //       thickness: 1.1,
+        //     )),
+        //     Padding(
+        //         padding: EdgeInsets.symmetric(horizontal: 8.w),
+        //         child: Text(
+        //           'Or Sign In With',
+        //           style: hintSubTitleNormal,
+        //         )),
+        //     Expanded(
+        //         child: Divider(
+        //       height: 0,
+        //       color: Colors.grey.shade200,
+        //       thickness: 1.1,
+        //     ))
+        //   ],
+        // ),
+        // SizedBox(height: 32.h),
+        // Row(
+        //   children: [
+        //     Expanded(
+        //       flex: 5,
+        //       child: CustomButton.google(
+        //         onTap: () => controller.loginWithGoogle(),
+        //       ),
+        //     ),
+        //     SizedBox(width: 8.w),
+        //     Expanded(
+        //       flex: 5,
+        //       child: CustomButton.facebook(
+        //         onTap: () => controller.loginWithFacebook(),
+        //       ),
+        //     ),
+        //   ],
+        // )
       ],
     );
   }

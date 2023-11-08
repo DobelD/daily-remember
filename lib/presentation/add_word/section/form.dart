@@ -13,11 +13,6 @@ class FormSection extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Column(children: [
-        AppForm(
-          controller: controller.english,
-          hintText: "English word",
-        ),
-        const SizedBox(height: 12),
         SizedBox(
             child: Column(
                 children: List.generate(

@@ -19,7 +19,7 @@ class LoginScreen extends GetView<LoginController> {
         return const WaitingScreen();
       }
       return Scaffold(
-          resizeToAvoidBottomInset: false,
+          backgroundColor: Colors.white,
           body: SafeArea(
             child: ListView(
               padding: EdgeInsets.all(16.r),
@@ -32,7 +32,7 @@ class LoginScreen extends GetView<LoginController> {
               ],
             ),
           ),
-          bottomSheet: const FooterLoginSection());
+          bottomNavigationBar: const FooterLoginSection());
     });
   }
 }

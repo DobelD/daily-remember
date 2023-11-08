@@ -1,9 +1,7 @@
-import 'package:dailyremember/domain/core/model/local_storage/vocabulary.dart';
 import 'package:dailyremember/infrastructure/theme/typography.dart';
 import 'package:dailyremember/presentation/home/controllers/home.controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:iconly/iconly.dart';
 
 import '../../../domain/core/model/word_model.dart';
@@ -17,14 +15,14 @@ class DetailWord extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.find<HomeController>();
     return Container(
-      height: Get.height * 0.36,
+      height: Get.height * 0.32,
       width: Get.width,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 22),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8), color: Colors.white),
       child: Column(
         children: List.generate(
-            6,
+            5,
             (index) => Padding(
                   padding: const EdgeInsets.only(bottom: 22),
                   child: Row(
@@ -46,7 +44,6 @@ class DetailWord extends StatelessWidget {
                           child: Text(
                             value(
                                 index: index,
-                                english: data.english,
                                 v1: data.verbOne,
                                 v2: data.verbTwo,
                                 v3: data.verbThree,
@@ -56,21 +53,21 @@ class DetailWord extends StatelessWidget {
                           )),
                       Expanded(
                           flex: 2,
-                          child: index != 0 && index != 5
+                          child: index != 4
                               ? GestureDetector(onTap: () {
                                   String targetText = '';
 
                                   switch (index) {
-                                    case 1:
+                                    case 0:
                                       targetText = data.verbOne ?? '';
                                       break;
-                                    case 2:
+                                    case 1:
                                       targetText = data.verbTwo ?? '';
                                       break;
-                                    case 3:
+                                    case 2:
                                       targetText = data.verbThree ?? '';
                                       break;
-                                    case 4:
+                                    case 3:
                                       targetText = data.verbIng ?? '';
                                       break;
                                   }
@@ -95,16 +92,11 @@ class DetailWord extends StatelessWidget {
   }
 
   String title(int index) {
-    return index == 0
-        ? "English"
-        : index == 5
-            ? "Indonesia"
-            : "Verb ${index == 4 ? 'Ing' : index}";
+    return index == 4 ? "Meaning" : "Verb ${index == 3 ? 'Ing' : index + 1}";
   }
 
   String value(
-      {String? english,
-      String? v1,
+      {String? v1,
       String? v2,
       String? v3,
       String? vIng,
@@ -112,14 +104,12 @@ class DetailWord extends StatelessWidget {
       required int index}) {
     String nullValue = "-";
     if (index == 0) {
-      return english ?? nullValue;
-    } else if (index == 1) {
       return v1 ?? nullValue;
-    } else if (index == 2) {
+    } else if (index == 1) {
       return v2 ?? nullValue;
-    } else if (index == 3) {
+    } else if (index == 2) {
       return v3 ?? nullValue;
-    } else if (index == 4) {
+    } else if (index == 3) {
       return vIng ?? nullValue;
     } else {
       return indo ?? nullValue;
@@ -138,14 +128,12 @@ class DetailWord extends StatelessWidget {
     TextStyle notNullValue = titleNormal;
 
     if (index == 0) {
-      return english != null ? notNullValue : nullValue;
-    } else if (index != 1) {
       return v1 != null ? notNullValue : nullValue;
-    } else if (index != 2) {
+    } else if (index != 1) {
       return v2 != null ? notNullValue : nullValue;
-    } else if (index != 3) {
+    } else if (index != 2) {
       return v3 != null ? notNullValue : nullValue;
-    } else if (index != 4) {
+    } else if (index != 3) {
       return vIng != null ? notNullValue : nullValue;
     } else {
       return indo != null ? notNullValue : nullValue;

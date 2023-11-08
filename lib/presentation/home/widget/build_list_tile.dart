@@ -7,11 +7,11 @@ import '../../../utils/style_helper/default_border_radius.dart';
 
 Widget buildListTile(HomeController controller, WordModel data, String tab) {
   String title = tab == "eng"
-      ? data.english?.capitalizeFirst ?? ''
+      ? data.verbOne?.capitalizeFirst ?? ''
       : data.indonesia?.capitalizeFirst ?? '';
   String subtitle = tab == "eng"
       ? data.indonesia?.capitalizeFirst ?? ''
-      : data.english?.capitalizeFirst ?? '';
+      : data.verbOne?.capitalizeFirst ?? '';
   return Card(
     color: data.remember == true ? Colors.blueAccent : Colors.white,
     elevation: 4,
