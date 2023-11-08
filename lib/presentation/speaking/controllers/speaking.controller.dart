@@ -4,9 +4,13 @@ import 'dart:io';
 import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:audioplayers/audioplayers.dart' as a;
 import 'package:audioplayers/audioplayers.dart';
+import 'package:dailyremember/components/app_snackbar.dart';
+import 'package:dailyremember/components/waiting_progress.dart';
+import 'package:dailyremember/domain/core/interfaces/transcribe_repository.dart';
 import 'package:dailyremember/domain/core/model/local_storage/speaking_model.dart';
 import 'package:dailyremember/presentation/speaking/widget/player_bar.dart';
 import 'package:dailyremember/presentation/speaking/widget/save_dialog.dart';
+import 'package:dailyremember/presentation/speaking/widget/transcribe_audio_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,15 +18,21 @@ import 'package:flutter_slidable_panel/controllers/slide_controller.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:hive/hive.dart';
+import 'package:language_tool/language_tool.dart';
 import 'package:path_provider/path_provider.dart';
-
 import '../../../infrastructure/theme/typography.dart';
 import '../widget/add_target.dart';
 import '../widget/menu_record.dart';
 
+enum SpeakingStatus { initial, loading, waiting, success, failed }
+
 class SpeakingController extends GetxController {
+  final TranscribeRepository _transcribeRepository;
+  SpeakingController(this._transcribeRepository);
   final SlideController slideController = SlideController(
       usePreActionController: true, usePostActionController: true);
+
+  var speakingStatus = Rx<SpeakingStatus>(SpeakingStatus.initial);
 
   TextEditingController targetController = TextEditingController();
   RecorderController recordController = RecorderController();
@@ -119,12 +129,10 @@ class SpeakingController extends GetxController {
     final hasPermission = await recordController.checkPermission();
     if (hasPermission) {
       Directory appDocDirectory = await getApplicationDocumentsDirectory();
-      String fileName = 'speaking-${box.values.length + 1}.aac';
+      String fileName = 'speaking-${box.values.length + 1}.wav';
       currentRecordingPath = '${appDocDirectory.path}/$fileName';
       await recordController.record(
-          path: currentRecordingPath,
-          androidEncoder: AndroidEncoder.aac,
-          bitRate: 256000);
+          path: currentRecordingPath, bitRate: 256000);
       // Bit Rate Sedang : 128000
       // Bit Rate Tinggi : 256000
 
@@ -158,31 +166,45 @@ class SpeakingController extends GetxController {
     isSave.value = true;
     if (currentRecordingPath != null) {
       recordController.stop();
-      var box = await Hive.openBox<SpeakingModel>('speakings');
-      String convidence = "";
-      var speakingModel = SpeakingModel(
-          titleController.text,
-          currentRecordingPath ?? '',
-          '${minutes.value.toString().padLeft(2, '0')}:${seconds.value.toString().padLeft(2, '0')}',
-          "",
-          convidence,
-          DateTime.timestamp().toString());
-      box.add(speakingModel);
-      // ignore: avoid_print
-      print("Rekaman disimpan.");
-      // Bersihkan nilai saat ini
-      titleController.clear();
-      currentRecordingPath = null;
-      isPlaying.clear();
-      isPlaying.value =
-          List.generate(box.values.length, (index) => false).toList();
-      loadSpeakingData();
       Get.back();
-      Get.back();
+      WaitingProgress.init(title: 'Saving record processed');
+      final idTranscribe = await _transcribeRepository.transcribeAudio(
+          currentRecordingPath ?? '', titleController.text);
+      if (idTranscribe != null) {
+        await addToLocalStorage(idTranscribe);
+        // Bersihkan nilai saat ini
+        titleController.clear();
+        currentRecordingPath = null;
+        isPlaying.clear();
+        isPlaying.value =
+            List.generate(box.values.length, (index) => false).toList();
+        loadSpeakingData();
+        Get.back();
+        Get.back();
+        AppSnackbar.success(message: "Success save recording!");
+      } else {
+        Get.back();
+        Get.back();
+        AppSnackbar.error(message: "Failed save recording!");
+      }
     } else {
       // ignore: avoid_print
       print("Tidak ada rekaman yang tersedia untuk disimpan.");
     }
+  }
+
+  Future<void> addToLocalStorage(String id) async {
+    var box = await Hive.openBox<SpeakingModel>('speakings');
+    var speakingModel = SpeakingModel(
+        titleController.text,
+        currentRecordingPath ?? '',
+        '${minutes.value.toString().padLeft(2, '0')}:${seconds.value.toString().padLeft(2, '0')}',
+        id,
+        "",
+        DateTime.timestamp().toString());
+    box.add(speakingModel);
+    // ignore: avoid_print
+    print("Rekaman disimpan.");
   }
 
   openPlayingBar(String path, int index) {
@@ -282,7 +304,7 @@ class SpeakingController extends GetxController {
     });
   }
 
-  void deleteSpeaking(int index, String audioPath) {
+  void deleteSpeaking(int index, String audioPath, String id) {
     Get.defaultDialog(
         title: "Delete Speaking",
         titleStyle: titleBold,
@@ -299,7 +321,7 @@ class SpeakingController extends GetxController {
                 style: hintSubTitleBold,
               )),
           TextButton(
-              onPressed: () => deleteAction(index, audioPath),
+              onPressed: () => deleteAction(index, audioPath, id),
               child: Text(
                 'Yes',
                 style: subTitleBold,
@@ -307,13 +329,94 @@ class SpeakingController extends GetxController {
         ]);
   }
 
-  void deleteAction(int index, String audioPath) {
+  void deleteAction(int index, String audioPath, String id) async {
     if (index >= 0 && index < box.length) {
-      box.deleteAt(index);
-      File(audioPath).delete();
-      loadSpeakingData();
       Get.back();
+      WaitingProgress.init(title: "Delete Speaking");
+      final res = await _transcribeRepository.deleteTranscribeAudio(id);
+      if (res != null) {
+        await Future.delayed(2.seconds, () {
+          box.deleteAt(index);
+          File(audioPath).delete();
+          loadSpeakingData();
+          Get.back();
+          AppSnackbar.success(message: "Speaking deleted!");
+        });
+      } else {
+        AppSnackbar.error(message: "Failed delete speaking!");
+      }
     }
+  }
+
+  Future<void> openTranscribe(String idTranscript) async {
+    final box = await Hive.openBox<SpeakingModel>(
+        'speakings'); // Gantilah 'your_box_name' dengan nama kotak Hive Anda
+    final speakingModels = box.values
+        .where((model) => model.idTranscript == idTranscript)
+        .toList();
+    if (speakingModels[0].transcript == "") {
+      Get.defaultDialog(
+          title: "Transcribe Audio",
+          titleStyle: titleBold,
+          middleText: "Audio not transcribe, trancribe now?",
+          middleTextStyle: subTitleNormal,
+          titlePadding: const EdgeInsets.only(top: 12),
+          contentPadding:
+              const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+          radius: 8.r,
+          actions: [
+            TextButton(
+                onPressed: () => Get.back(),
+                child: Text(
+                  'No',
+                  style: hintSubTitleBold,
+                )),
+            TextButton(
+                onPressed: () => getTranscribe(idTranscript),
+                child: Text(
+                  'Yes',
+                  style: subTitleBold,
+                ))
+          ]);
+    } else {
+      openBottomSheetTranscribe(idTranscript);
+    }
+  }
+
+  Future<void> getTranscribe(String id) async {
+    Get.back();
+    speakingStatus(SpeakingStatus.waiting);
+    if (speakingStatus.value == SpeakingStatus.waiting) {
+      WaitingProgress.init(title: 'Trancribe processed');
+    }
+    final transcribe = await _transcribeRepository.getTranscribeAudio(id);
+    if (transcribe != null) {
+      final box = await Hive.openBox<SpeakingModel>('speakings');
+      final speakingModels =
+          box.values.where((model) => model.idTranscript == id).toList();
+      final speakingModel = speakingModels[0];
+      speakingModel.transcript = transcribe;
+      await speakingModel.save();
+      Future.delayed(1.seconds, () {
+        speakingStatus(SpeakingStatus.success);
+        Get.back();
+        openBottomSheetTranscribe(id);
+      });
+    } else {
+      Get.back();
+      AppSnackbar.error(
+          message: "Try again later, the transcription is being generated!");
+    }
+  }
+
+  void openBottomSheetTranscribe(String id) async {
+    final box = await Hive.openBox<SpeakingModel>('speakings');
+    final speakingModels =
+        box.values.where((model) => model.idTranscript == id).toList();
+    final speakingModel = speakingModels[0];
+    Get.bottomSheet(TranscribeAudioWidget(transcribe: speakingModel.transcript),
+        enterBottomSheetDuration: 400.milliseconds,
+        exitBottomSheetDuration: 400.milliseconds);
   }
 
   @override

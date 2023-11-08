@@ -36,6 +36,9 @@ dependencies:
   speech_to_text: ^6.4.0
   substring_highlight: ^1.0.33
   local_auth: ^2.1.7
+  ffmpeg_kit_flutter: ^6.0.3
+  language_tool: ^2.2.0
+  languagetool_textfield: ^0.0.5
 
 dev_dependencies: 
   flutter_lints: ^2.0.0

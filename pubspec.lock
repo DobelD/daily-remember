@@ -314,6 +314,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.0"
+  ffmpeg_kit_flutter:
+    dependency: "direct main"
+    description:
+      name: ffmpeg_kit_flutter
+      sha256: "843aae41823ca94a0988d975b4b6cdc6948744b9b7e2707d81a3a9cd237b0100"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.0.3"
+  ffmpeg_kit_flutter_platform_interface:
+    dependency: transitive
+    description:
+      name: ffmpeg_kit_flutter_platform_interface
+      sha256: addf046ae44e190ad0101b2fde2ad909a3cd08a2a109f6106d2f7048b7abedee
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.1"
   file:
     dependency: transitive
     description:
@@ -529,6 +545,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.8.1"
+  language_tool:
+    dependency: "direct main"
+    description:
+      name: language_tool
+      sha256: a27c4ccff2b90647c5fa0f702d7c0c172c3d11d1a7b6c4ffc3c51ba8e7fc5a84
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.0"
+  languagetool_textfield:
+    dependency: "direct main"
+    description:
+      name: languagetool_textfield
+      sha256: a2d61ee13392b69bf789d613af0c98e6006eeb278e2723df967a4e2e230a9df1
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.5"
   lints:
     dependency: transitive
     description:
@@ -950,6 +982,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.0"
+  throttling:
+    dependency: transitive
+    description:
+      name: throttling
+      sha256: "0b328adb283db092373b2835574fbcdf7d0e472d24f0455717c836ef9824def9"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   timing:
     dependency: transitive
     description:

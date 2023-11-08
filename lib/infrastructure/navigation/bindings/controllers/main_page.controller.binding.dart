@@ -1,3 +1,4 @@
+import 'package:dailyremember/infrastructure/dal/repository/transcribe_repository_impl.dart';
 import 'package:dailyremember/presentation/home/controllers/home.controller.dart';
 import 'package:get/get.dart';
 
@@ -22,7 +23,7 @@ class MainPageControllerBinding extends Bindings {
       () => DictionaryController(),
     );
     Get.lazyPut<SpeakingController>(
-      () => SpeakingController(),
+      () => SpeakingController(TranscribeRepositoryImpl()),
     );
     Get.lazyPut<ProgressController>(
       () => ProgressController(),

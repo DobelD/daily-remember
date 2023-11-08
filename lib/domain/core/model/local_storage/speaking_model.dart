@@ -11,11 +11,11 @@ class SpeakingModel extends HiveObject {
   @HiveField(2)
   late String duration;
   @HiveField(3)
-  late String text;
+  late String idTranscript;
   @HiveField(4)
-  late String convidence;
+  late String transcript;
   @HiveField(5)
   late String createdAt;
-  SpeakingModel(this.title, this.audioPath, this.duration, this.text,
-      this.convidence, this.createdAt);
+  SpeakingModel(this.title, this.audioPath, this.duration, this.idTranscript,
+      this.transcript, this.createdAt);
 }

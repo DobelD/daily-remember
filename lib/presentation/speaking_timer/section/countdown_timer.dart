@@ -5,12 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
+import '../../../infrastructure/dal/repository/transcribe_repository_impl.dart';
+
 class CountDownTimer extends StatelessWidget {
   const CountDownTimer({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(SpeakingTimerController());
+    final controller =
+        Get.put(SpeakingTimerController(TranscribeRepositoryImpl()));
     return Center(
       child: Container(
         child: Obx(() {

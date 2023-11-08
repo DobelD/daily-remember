@@ -81,5 +81,10 @@ class Nav {
       page: () => const AccountScreen(),
       binding: AccountControllerBinding(),
     ),
+    GetPage(
+      name: Routes.SPELLING_CHECK,
+      page: () => const SpellingCheckScreen(),
+      binding: SpellingCheckControllerBinding(),
+    ),
   ];
 }

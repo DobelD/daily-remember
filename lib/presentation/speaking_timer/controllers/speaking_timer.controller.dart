@@ -9,16 +9,28 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
+import '../../../components/app_snackbar.dart';
+import '../../../components/waiting_progress.dart';
+import '../../../domain/core/interfaces/transcribe_repository.dart';
 import '../../../domain/core/model/local_storage/speaking_model.dart';
+import '../../../infrastructure/dal/repository/transcribe_repository_impl.dart';
 import '../../../infrastructure/theme/typography.dart';
 import '../widget/save_dialog.dart';
 
+enum SpeakingTimerStatus { initial, loading, waiting, success, failed }
+
 class SpeakingTimerController extends GetxController {
+  final TranscribeRepository _transcribeRepository;
+  SpeakingTimerController(this._transcribeRepository);
+
+  var speakingTimeStatus = Rx<SpeakingTimerStatus>(SpeakingTimerStatus.initial);
+
   TextEditingController titleController = TextEditingController();
   final CountDownController countDownController = CountDownController();
   RecorderController recordController = RecorderController();
   late Box<SpeakingModel> box;
   String? currentRecordingPath;
+
   var isRunning = false.obs;
   var isFinish = false.obs;
   var isReset = false.obs;
@@ -67,12 +79,10 @@ class SpeakingTimerController extends GetxController {
     final hasPermission = await recordController.checkPermission();
     if (hasPermission) {
       Directory appDocDirectory = await getApplicationDocumentsDirectory();
-      String fileName = 'speaking-${box.values.length + 1}.aac';
+      String fileName = 'speaking-${box.values.length + 1}.wav';
       currentRecordingPath = '${appDocDirectory.path}/$fileName';
       await recordController.record(
-          path: currentRecordingPath,
-          androidEncoder: AndroidEncoder.aac,
-          bitRate: 256000);
+          path: currentRecordingPath, bitRate: 256000);
       // Bit Rate Sedang : 128000
       // Bit Rate Tinggi : 256000
 
@@ -141,29 +151,45 @@ class SpeakingTimerController extends GetxController {
   Future<void> saveRecording() async {
     if (currentRecordingPath != null) {
       recordController.stop();
-      var box = await Hive.openBox<SpeakingModel>('speakings');
-      var speakingModel = SpeakingModel(
-          titleController.text,
-          currentRecordingPath ?? '',
-          saveDurationSpeaking.value,
-          "",
-          "",
-          DateTime.timestamp().toString());
-      box.add(speakingModel);
-      // ignore: avoid_print
-      print("Rekaman disimpan.");
-      // Bersihkan nilai saat ini
-      titleController.clear();
-      currentRecordingPath = null;
       Get.back();
+      WaitingProgress.init(title: 'Saving record processed');
+      final idTranscribe = await _transcribeRepository.transcribeAudio(
+          currentRecordingPath ?? '', titleController.text);
+      if (idTranscribe != null) {
+        await addToLocalStorage(idTranscribe);
+        // Bersihkan nilai saat ini
+        titleController.clear();
+        currentRecordingPath = null;
+        Get.back();
+        AppSnackbar.success(message: "Success save recording!");
+      } else {
+        Get.back();
+        AppSnackbar.error(message: "Failed save recording!");
+      }
     } else {
+      Get.back();
       // ignore: avoid_print
       print("Tidak ada rekaman yang tersedia untuk disimpan.");
     }
   }
 
+  Future<void> addToLocalStorage(String id) async {
+    var box = await Hive.openBox<SpeakingModel>('speakings');
+    var speakingModel = SpeakingModel(
+        titleController.text,
+        currentRecordingPath ?? '',
+        saveDurationSpeaking.value,
+        id,
+        "",
+        DateTime.timestamp().toString());
+    box.add(speakingModel);
+    // ignore: avoid_print
+    print("Rekaman disimpan.");
+  }
+
   refreshDataSpeaking() {
-    final speakingController = Get.put(SpeakingController());
+    final speakingController =
+        Get.put(SpeakingController(TranscribeRepositoryImpl()));
     speakingController.loadSpeakingData();
   }
 

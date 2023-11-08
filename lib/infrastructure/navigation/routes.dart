@@ -4,6 +4,7 @@ class Routes {
     return SPLASH_SCREEN;
   }
 
+  static const ACCOUNT = '/account';
   static const ADD_WORD = '/add-word';
   static const AUTHLOGIN = '/authlogin';
   static const DICTIONARY = '/dictionary';
@@ -15,5 +16,5 @@ class Routes {
   static const SPEAKING = '/speaking';
   static const SPEAKING_TIMER = '/speaking-timer';
   static const SPLASH_SCREEN = '/splash-screen';
-  static const ACCOUNT = '/account';
+  static const SPELLING_CHECK = '/spelling-check';
 }

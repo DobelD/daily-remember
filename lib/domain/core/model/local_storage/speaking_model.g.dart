@@ -37,9 +37,9 @@ class SpeakingModelAdapter extends TypeAdapter<SpeakingModel> {
       ..writeByte(2)
       ..write(obj.duration)
       ..writeByte(3)
-      ..write(obj.text)
+      ..write(obj.idTranscript)
       ..writeByte(4)
-      ..write(obj.convidence)
+      ..write(obj.transcript)
       ..writeByte(5)
       ..write(obj.createdAt);
   }

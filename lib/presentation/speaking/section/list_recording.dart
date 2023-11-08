@@ -1,14 +1,9 @@
-import 'package:dailyremember/components/app_form.dart';
-import 'package:dailyremember/domain/core/model/local_storage/speaking_model.dart';
 import 'package:dailyremember/infrastructure/theme/typography.dart';
 import 'package:dailyremember/presentation/speaking/controllers/speaking.controller.dart';
 import 'package:dailyremember/utils/extension/date_conversion.dart';
 import 'package:dailyremember/utils/extension/date_format.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_slidable_panel/flutter_slidable_panel.dart';
 import 'package:get/get.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:iconly/iconly.dart';
 
 import '../../../utils/style_helper/default_border_radius.dart';
@@ -59,7 +54,11 @@ class ListRecording extends StatelessWidget {
                         ),
                         child: ListTile(
                           onLongPress: () {
-                            controller.deleteSpeaking(index, data.audioPath);
+                            controller.deleteSpeaking(
+                                index, data.audioPath, data.idTranscript);
+                          },
+                          onTap: () {
+                            controller.openTranscribe(data.idTranscript);
                           },
                           title: Text(
                             data.title,
@@ -72,8 +71,6 @@ class ListRecording extends StatelessWidget {
                           trailing: Obx(() {
                             return IconButton(
                               onPressed: () {
-                                print(data.text);
-                                print(data.convidence);
                                 controller.openPlayingBar(
                                     data.audioPath, index);
                               },
