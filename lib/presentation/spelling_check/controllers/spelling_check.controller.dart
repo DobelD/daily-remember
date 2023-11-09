@@ -1,4 +1,5 @@
 import 'package:dailyremember/components/app_button.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -32,6 +33,21 @@ class SpellingCheckController extends GetxController {
           ],
         ));
   }
+
+  // Future<void> checkGrammerSpelling() async {
+  //   print(Get.arguments);
+  //   Dio dio = Dio();
+  //   try {
+  //     final response = await dio.post(
+  //         'https://api.textgears.com/spelling?text=${Get.arguments}&language=en-GB&ai=1&key=VKRVkaQcuZLGpBA6');
+  //     print(response.statusCode);
+  //     print(response.data);
+  //   } catch (e) {
+  //     if (e is DioException) {
+  //       print(e.response?.data);
+  //     }
+  //   }
+  // }
 
   @override
   void onInit() {

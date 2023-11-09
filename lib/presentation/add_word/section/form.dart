@@ -19,31 +19,10 @@ class FormSection extends StatelessWidget {
           controller.listTextController.length,
           (index) => Padding(
             padding: const EdgeInsets.only(bottom: 12),
-            child: Row(
-              children: [
-                Expanded(
-                  child: AppForm(
-                    controller: controller.listTextController[index],
-                    hintText: controller.listHintText[index],
-                    onChanged: (value) =>
-                        controller.checkValueForm(value, index),
-                  ),
-                ),
-                SizedBox(
-                    width: 50,
-                    child: Obx(() {
-                      return IconButton(
-                          onPressed:
-                              controller.isActiveRecording[index] == false
-                                  ? () => controller.messageRequeredValue()
-                                  : () => controller.openMenuRecord(index),
-                          icon: Icon(Icons.mic_rounded,
-                              color:
-                                  controller.isActiveRecording[index] == false
-                                      ? Colors.grey.shade300
-                                      : Colors.black));
-                    }))
-              ],
+            child: AppForm(
+              controller: controller.listTextController[index],
+              hintText: controller.listHintText[index],
+              // onChanged: (value) => controller.checkValueForm(value, index),
             ),
           ),
         ))),
@@ -66,3 +45,20 @@ class FormSection extends StatelessWidget {
     );
   }
 }
+
+
+
+     // SizedBox(
+    //     width: 50,
+    //     child: Obx(() {
+    //       return IconButton(
+    //           onPressed:
+    //               controller.isActiveRecording[index] == false
+    //                   ? () => controller.messageRequeredValue()
+    //                   : () => controller.openMenuRecord(index),
+    //           icon: Icon(Icons.mic_rounded,
+    //               color:
+    //                   controller.isActiveRecording[index] == false
+    //                       ? Colors.grey.shade300
+    //                       : Colors.black));
+    //     }))

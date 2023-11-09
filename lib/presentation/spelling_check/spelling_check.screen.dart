@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
-import 'package:languagetool_textfield/languagetool_textfield.dart';
 
 import 'controllers/spelling_check.controller.dart';
 
@@ -17,6 +16,9 @@ class SpellingCheckScreen extends GetView<SpellingCheckController> {
         title: const Text('SpellingCheckScreen'),
         centerTitle: true,
       ),
+      floatingActionButton: FloatingActionButton(onPressed: () {
+        // controller.checkGrammerSpelling();
+      }),
       // body: TextFormField(
       //   controller: controller.transcribe,
       //   maxLines: 100,

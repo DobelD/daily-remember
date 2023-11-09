@@ -1,7 +1,8 @@
-import 'package:dailyremember/components/app_snackbar.dart';
 import 'package:dailyremember/domain/core/interfaces/auth_repository.dart';
+import 'package:dailyremember/domain/core/model/user_model.dart';
 import 'package:dailyremember/infrastructure/navigation/routes.dart';
 import 'package:dailyremember/utils/preference/app_preference.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get/get.dart';
 
 enum AccountStatus { initial, loading, success, failed }
@@ -11,18 +12,32 @@ class AccountController extends GetxController {
   AccountController(this._authRepository);
 
   var accountStatus = Rx<AccountStatus>(AccountStatus.initial);
+  var userProfile = UserModel();
+
+  late CacheManager customCacheManager;
 
   Future<void> logout() async {
-    final token = AppPreference().getAccessToken();
+    AppPreference().clearLocalStorage();
+    Get.offAllNamed(Routes.LOGIN);
+  }
+
+  Future<void> getUserProfile() async {
     accountStatus(AccountStatus.loading);
-    final res = await _authRepository.logout(token ?? '');
-    if (res == true) {
+    final res = await _authRepository.userProfile();
+    if (res != null) {
+      userProfile = res;
+      update();
       accountStatus(AccountStatus.success);
-      AppPreference().clearLocalStorage();
-      Get.offAllNamed(Routes.LOGIN);
     } else {
       accountStatus(AccountStatus.failed);
-      AppSnackbar.error(message: 'Logout failed');
     }
+  }
+
+  @override
+  void onInit() {
+    getUserProfile();
+    customCacheManager = CacheManager(Config('customCacheKey',
+        stalePeriod: 15.days, maxNrOfCacheObjects: 100));
+    super.onInit();
   }
 }

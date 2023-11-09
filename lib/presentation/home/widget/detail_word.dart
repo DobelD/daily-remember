@@ -1,9 +1,8 @@
+import 'package:dailyremember/components/app_bottom_sheet.dart';
 import 'package:dailyremember/infrastructure/theme/typography.dart';
 import 'package:dailyremember/presentation/home/controllers/home.controller.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:iconly/iconly.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../domain/core/model/word_model.dart';
 
 class DetailWord extends StatelessWidget {
@@ -13,34 +12,30 @@ class DetailWord extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<HomeController>();
-    return Container(
-      height: Get.height * 0.32,
-      width: Get.width,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 22),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8), color: Colors.white),
+    return AppBottomSheet.witoutFooter(
+      title: "Vocabulary",
       child: Column(
         children: List.generate(
             5,
             (index) => Padding(
-                  padding: const EdgeInsets.only(bottom: 22),
+                  padding: const EdgeInsets.only(bottom: 16),
                   child: Row(
                     children: [
-                      const Icon(
-                        IconlyBold.arrow_right_2,
-                        color: Colors.blueAccent,
-                        size: 16,
+                      Icon(
+                        Icons.circle_rounded,
+                        color: Colors.black,
+                        size: 6.r,
                       ),
                       const SizedBox(width: 6),
                       Expanded(
                           flex: 3,
                           child: Text(
                             title(index),
-                            style: titleBold,
+                            style: titleNormal,
                           )),
+                      const Expanded(flex: 1, child: Text(":")),
                       Expanded(
-                          flex: 7,
+                          flex: 8,
                           child: Text(
                             value(
                                 index: index,
@@ -49,41 +44,8 @@ class DetailWord extends StatelessWidget {
                                 v3: data.verbThree,
                                 vIng: data.verbIng,
                                 indo: data.indonesia),
-                            style: titleNormal,
+                            style: titleBold,
                           )),
-                      Expanded(
-                          flex: 2,
-                          child: index != 4
-                              ? GestureDetector(onTap: () {
-                                  String targetText = '';
-
-                                  switch (index) {
-                                    case 0:
-                                      targetText = data.verbOne ?? '';
-                                      break;
-                                    case 1:
-                                      targetText = data.verbTwo ?? '';
-                                      break;
-                                    case 2:
-                                      targetText = data.verbThree ?? '';
-                                      break;
-                                    case 3:
-                                      targetText = data.verbIng ?? '';
-                                      break;
-                                  }
-                                  controller.playAudioRecord(targetText, index);
-
-                                  // controller.printFilesInDirectory();
-                                }, child: Obx(() {
-                                  return Icon(
-                                    IconlyBold.volume_up,
-                                    size: 18,
-                                    color: controller.isPlaying[index] == false
-                                        ? Colors.black
-                                        : Colors.blueAccent,
-                                  );
-                                }))
-                              : const SizedBox())
                     ],
                   ),
                 )),

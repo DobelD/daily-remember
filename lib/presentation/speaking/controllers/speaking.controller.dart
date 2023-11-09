@@ -349,8 +349,7 @@ class SpeakingController extends GetxController {
   }
 
   Future<void> openTranscribe(String idTranscript) async {
-    final box = await Hive.openBox<SpeakingModel>(
-        'speakings'); // Gantilah 'your_box_name' dengan nama kotak Hive Anda
+    final box = await Hive.openBox<SpeakingModel>('speakings');
     final speakingModels = box.values
         .where((model) => model.idTranscript == idTranscript)
         .toList();

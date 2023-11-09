@@ -1,5 +1,6 @@
 import 'package:dailyremember/domain/core/interfaces/auth_repository.dart';
 import 'package:dailyremember/domain/core/model/params/login_param.dart';
+import 'package:dailyremember/domain/core/model/user_model.dart';
 import 'package:dio/dio.dart';
 
 import '../../../domain/core/model/params/register_param.dart';
@@ -54,6 +55,20 @@ class AuthRepositoryImpl implements AuthRepository {
     } catch (e) {
       print(e);
       return false;
+    }
+  }
+
+  @override
+  Future<UserModel?> userProfile() async {
+    try {
+      final response = await RemoteProvider.client.post('auth/me');
+      if (response.statusCode == 200) {
+        return UserModel.fromJson(response.data);
+      } else {
+        return null;
+      }
+    } catch (e) {
+      return null;
     }
   }
 }

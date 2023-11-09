@@ -72,34 +72,34 @@ class AddWordController extends GetxController {
         verbTwo: verbTwo.text.trim(),
         verbThree: verbThree.text.trim(),
         verbIng: verbIng.text.trim());
-    if (isRedordingDone.every((element) => element)) {
-      final res = Get.arguments['type'] != "update"
-          ? await _wordRepository.createWord(params)
-          : await _wordRepository.updateWord(params, data?.id ?? 0);
-      if (verbOne.text.isNotEmpty ||
-          verbTwo.text.isNotEmpty ||
-          verbThree.text.isNotEmpty ||
-          verbIng.text.isNotEmpty) {
-        saveRecording();
-      }
-      if (res != null) {
-        addWordStatus(AddWordStatus.success);
-        doneAction.value = true;
-        clearForm();
-      }
-    } else {
-      AppSnackbar.error(message: "Audio is required!");
+
+    final res = Get.arguments['type'] != "update"
+        ? await _wordRepository.createWord(params)
+        : await _wordRepository.updateWord(params, data?.id ?? 0);
+    // if (verbOne.text.isNotEmpty ||
+    //     verbTwo.text.isNotEmpty ||
+    //     verbThree.text.isNotEmpty ||
+    //     verbIng.text.isNotEmpty) {
+    //   saveRecording();
+    // }
+    if (res != null) {
+      addWordStatus(AddWordStatus.success);
+      doneAction.value = true;
+      clearForm();
     }
+    // if (isRedordingDone.every((element) => element)) {
+
+    // } else {
+    //   AppSnackbar.error(message: "Audio is required!");
+    // }
 
     addWordStatus(AddWordStatus.failed);
   }
 
   clearForm() {
-    indonesia.clear();
-    verbOne.clear();
-    verbTwo.clear();
-    verbThree.clear();
-    verbIng.clear();
+    for (int i = 0; i < listTextController.length; i++) {
+      listTextController[i]?.clear();
+    }
   }
 
   setDictionaryData() {
@@ -134,144 +134,144 @@ class AddWordController extends GetxController {
     controllerHome.getWord();
   }
 
-  openMenuRecord(int index) async {
-    isRedordingDone[index] = true;
-    currentIndex.value = index;
-    isSave.value = false;
-    isStop.value = false;
-    final hasPermission = await recordController.checkPermission();
-    if (hasPermission) {
-      startRecording(index);
-      startTimer();
-      Get.bottomSheet(const MenuRecord()).whenComplete(() {
-        log("---------Stop Recording---------");
-        recordController.stop();
-        resetTimer();
-      });
-    }
-  }
-
-  Future<void> startRecording(int index) async {
-    print(listTextController[index]?.text ?? '');
-    print(index);
-    final hasPermission = await recordController.checkPermission();
-    if (hasPermission) {
-      Directory appDocDirectory = await getApplicationDocumentsDirectory();
-      String fileName = 'vocabulary-${listTextController[index]?.text}.aac';
-      print("File NAme : $fileName");
-      await recordController.record(
-          path: '${appDocDirectory.path}/$fileName',
-          androidEncoder: AndroidEncoder.aac,
-          bitRate: 256000);
-      // Bit Rate Sedang : 128000
-      // Bit Rate Tinggi : 256000
-
-      bool isRecording = recordController.isRecording;
-      if (isRecording) {
-        // ignore: avoid_print
-        print("Merekam");
-      }
-    } else {
-      // ignore: avoid_print
-      print("Tidak dapat merekam, periksa izin mikrofon.");
-    }
-  }
-
-  // openSaveDialog() {
-  //   onResumeStopRecord();
-  //   Get.defaultDialog(
-  //       radius: 8,
-  //       title: "Save Recording?",
-  //       content: SaveDialog(
-  //         onPressed: () => saveRecording(),
-  //       )).whenComplete(() {
-  //     if (isSave.value == false) {
-  //       onResumeStopRecord();
-  //     }
-  //   });
+  // openMenuRecord(int index) async {
+  //   isRedordingDone[index] = true;
+  //   currentIndex.value = index;
+  //   isSave.value = false;
+  //   isStop.value = false;
+  //   final hasPermission = await recordController.checkPermission();
+  //   if (hasPermission) {
+  //     startRecording(index);
+  //     startTimer();
+  //     Get.bottomSheet(const MenuRecord()).whenComplete(() {
+  //       log("---------Stop Recording---------");
+  //       recordController.stop();
+  //       resetTimer();
+  //     });
+  //   }
   // }
 
-  Future<void> saveRecording() async {
-    isSave.value = true;
-    recordController.stop();
-    Directory appDocDirectory = await getApplicationDocumentsDirectory();
-    var box = await Hive.openBox<VocabularyModel>('vocabulary');
-    var vocabularyModel = VocabularyModel(
-        "${appDocDirectory.path}/vocabulary-${listTextController[0]?.text}.acc",
-        "${appDocDirectory.path}/vocabulary-${listTextController[1]?.text}.acc",
-        "${appDocDirectory.path}/vocabulary-${listTextController[2]?.text}.acc",
-        "${appDocDirectory.path}/vocabulary-${listTextController[3]?.text}.acc");
+  // Future<void> startRecording(int index) async {
+  //   print(listTextController[index]?.text ?? '');
+  //   print(index);
+  //   final hasPermission = await recordController.checkPermission();
+  //   if (hasPermission) {
+  //     Directory appDocDirectory = await getApplicationDocumentsDirectory();
+  //     String fileName = 'vocabulary-${listTextController[index]?.text}.aac';
+  //     print("File NAme : $fileName");
+  //     await recordController.record(
+  //         path: '${appDocDirectory.path}/$fileName',
+  //         androidEncoder: AndroidEncoder.aac,
+  //         bitRate: 256000);
+  //     // Bit Rate Sedang : 128000
+  //     // Bit Rate Tinggi : 256000
 
-    box.add(vocabularyModel);
-    // ignore: avoid_print
-    print("Rekaman disimpan.");
-    // Bersihkan nilai saat ini
-    titleController.clear();
-    listTextController.clear();
-  }
+  //     bool isRecording = recordController.isRecording;
+  //     if (isRecording) {
+  //       // ignore: avoid_print
+  //       print("Merekam");
+  //     }
+  //   } else {
+  //     // ignore: avoid_print
+  //     print("Tidak dapat merekam, periksa izin mikrofon.");
+  //   }
+  // }
 
-  void startTimer() {
-    if (!isRunning.value) {
-      isRunning.value = true;
-      Duration duration = 1.seconds;
-      Timer.periodic(duration, (Timer timer) {
-        if (isRunning.value) {
-          if (seconds.value < 59) {
-            seconds.value++;
-          } else {
-            seconds.value = 0;
-            minutes.value++;
-          }
-        } else {
-          timer.cancel();
-        }
-      });
-    }
-  }
+  // // openSaveDialog() {
+  // //   onResumeStopRecord();
+  // //   Get.defaultDialog(
+  // //       radius: 8,
+  // //       title: "Save Recording?",
+  // //       content: SaveDialog(
+  // //         onPressed: () => saveRecording(),
+  // //       )).whenComplete(() {
+  // //     if (isSave.value == false) {
+  // //       onResumeStopRecord();
+  // //     }
+  // //   });
+  // // }
 
-  void stopTimer() {
-    isRunning.value = false;
-  }
+  // Future<void> saveRecording() async {
+  //   isSave.value = true;
+  //   recordController.stop();
+  //   Directory appDocDirectory = await getApplicationDocumentsDirectory();
+  //   var box = await Hive.openBox<VocabularyModel>('vocabulary');
+  //   var vocabularyModel = VocabularyModel(
+  //       "${appDocDirectory.path}/vocabulary-${listTextController[0]?.text}.acc",
+  //       "${appDocDirectory.path}/vocabulary-${listTextController[1]?.text}.acc",
+  //       "${appDocDirectory.path}/vocabulary-${listTextController[2]?.text}.acc",
+  //       "${appDocDirectory.path}/vocabulary-${listTextController[3]?.text}.acc");
 
-  void resetTimer() {
-    isRunning.value = false;
-    seconds.value = 0;
-    minutes.value = 0;
-  }
+  //   box.add(vocabularyModel);
+  //   // ignore: avoid_print
+  //   print("Rekaman disimpan.");
+  //   // Bersihkan nilai saat ini
+  //   titleController.clear();
+  //   listTextController.clear();
+  // }
 
-  void onSaveRecord() {
-    // saveRecording();
-    Get.back();
-  }
+  // void startTimer() {
+  //   if (!isRunning.value) {
+  //     isRunning.value = true;
+  //     Duration duration = 1.seconds;
+  //     Timer.periodic(duration, (Timer timer) {
+  //       if (isRunning.value) {
+  //         if (seconds.value < 59) {
+  //           seconds.value++;
+  //         } else {
+  //           seconds.value = 0;
+  //           minutes.value++;
+  //         }
+  //       } else {
+  //         timer.cancel();
+  //       }
+  //     });
+  //   }
+  // }
 
-  void onDeleteRecord() {
-    Get.back();
-  }
+  // void stopTimer() {
+  //   isRunning.value = false;
+  // }
 
-  void onResumeStopRecord() {
-    isStop.value = !isStop.value;
-    if (isRunning.value) {
-      stopTimer();
-      recordController.pause();
-    } else {
-      startRecording(currentIndex.value);
-      startTimer();
-    }
-  }
+  // void resetTimer() {
+  //   isRunning.value = false;
+  //   seconds.value = 0;
+  //   minutes.value = 0;
+  // }
 
-  void checkValueForm(String value, int index) {
-    isActiveRecording[index] = value.isNotEmpty;
-  }
+  // void onSaveRecord() {
+  //   // saveRecording();
+  //   Get.back();
+  // }
 
-  void messageRequeredValue() {
-    Get.showSnackbar(GetSnackBar(
-      margin: const EdgeInsets.all(12),
-      backgroundColor: Colors.red,
-      borderRadius: 8,
-      message: "Isi form untuk melakukan record",
-      duration: 1.seconds,
-    ));
-  }
+  // void onDeleteRecord() {
+  //   Get.back();
+  // }
+
+  // void onResumeStopRecord() {
+  //   isStop.value = !isStop.value;
+  //   if (isRunning.value) {
+  //     stopTimer();
+  //     recordController.pause();
+  //   } else {
+  //     startRecording(currentIndex.value);
+  //     startTimer();
+  //   }
+  // }
+
+  // void checkValueForm(String value, int index) {
+  //   isActiveRecording[index] = value.isNotEmpty;
+  // }
+
+  // void messageRequeredValue() {
+  //   Get.showSnackbar(GetSnackBar(
+  //     margin: const EdgeInsets.all(12),
+  //     backgroundColor: Colors.red,
+  //     borderRadius: 8,
+  //     message: "Isi form untuk melakukan record",
+  //     duration: 1.seconds,
+  //   ));
+  // }
 
   @override
   void onInit() {

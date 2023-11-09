@@ -18,6 +18,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:hive/hive.dart';
 
+import '../../../components/app_default_dialog.dart';
 import '../../../infrastructure/navigation/routes.dart';
 // import '../widget/player_bar.dart';
 
@@ -192,12 +193,17 @@ class HomeController extends GetxController {
   }
 
   openDialogRemembered(WordModel data) {
-    var param = WordParam(indonesia: data.indonesia ?? '', remember: true);
-    Get.dialog(DialogConfirmationRemembered(
-      data: param,
-      id: data.id ?? 0,
-      onPressed: () => confirmationRemembered(param, data.id ?? 0),
-    ));
+    var param = WordParam(
+        indonesia: data.indonesia ?? '',
+        remember: true,
+        verbOne: data.verbOne,
+        verbTwo: data.verbTwo,
+        verbThree: data.verbThree,
+        verbIng: data.verbIng);
+    AppDefaultDialog.show(
+        title: "Remembered",
+        message: "Yakin udah hafal?",
+        onTabYes: () => confirmationRemembered(param, data.id ?? 0));
   }
 
   confirmationRemembered(WordParam data, int id) async {
