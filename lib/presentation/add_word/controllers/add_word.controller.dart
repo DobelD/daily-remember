@@ -1,19 +1,13 @@
 import 'dart:async';
-import 'dart:developer';
-import 'dart:io';
-
 import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:dailyremember/components/app_snackbar.dart';
 import 'package:dailyremember/domain/core/model/word_model.dart';
 import 'package:dailyremember/domain/core/model/word_param.dart';
-import 'package:dailyremember/presentation/add_word/widget/menu_record.dart';
 import 'package:dailyremember/presentation/home/controllers/home.controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
-import 'package:path_provider/path_provider.dart';
 import '../../../domain/core/interfaces/word_repository.dart';
 import '../../../domain/core/model/local_storage/vocabulary.dart';
 

@@ -33,7 +33,9 @@ class AuthRepositoryImpl implements AuthRepository {
           await RemoteProvider.client.post('auth/login', data: param.toMap());
       if (response.statusCode == 200) {
         final token = response.data['access_token'];
+        final userId = response.data['user_id'];
         AppPreference().saveAccessToken(token);
+        AppPreference().saveUserId(userId);
         return true;
       } else {
         return null;

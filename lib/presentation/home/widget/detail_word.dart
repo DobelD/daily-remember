@@ -1,6 +1,5 @@
 import 'package:dailyremember/components/app_bottom_sheet.dart';
 import 'package:dailyremember/infrastructure/theme/typography.dart';
-import 'package:dailyremember/presentation/home/controllers/home.controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../domain/core/model/word_model.dart';

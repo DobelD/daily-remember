@@ -1,7 +1,6 @@
 import 'package:dailyremember/components/app_button.dart';
 import 'package:dailyremember/components/app_form.dart';
 import 'package:dailyremember/presentation/home/controllers/home.controller.dart';
-import 'package:dailyremember/presentation/speaking/controllers/speaking.controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

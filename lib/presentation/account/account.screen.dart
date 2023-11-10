@@ -1,6 +1,5 @@
-import 'package:avatar_glow/avatar_glow.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dailyremember/presentation/account/section/footer_account_section.dart';
+import 'package:dailyremember/presentation/account/section/target_section.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -17,7 +16,10 @@ class AccountScreen extends GetView<AccountController> {
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.all(16),
-          children: [ProfileSection(controller: controller)],
+          children: [
+            ProfileSection(controller: controller),
+            const TargetSection()
+          ],
         ),
       ),
       bottomNavigationBar: FooterAccountSection(controller: controller),

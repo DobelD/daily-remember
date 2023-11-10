@@ -1,7 +1,6 @@
 import 'package:dailyremember/components/app_button.dart';
 import 'package:dailyremember/infrastructure/theme/typography.dart';
 import 'package:dailyremember/presentation/auth/login/controllers/login.controller.dart';
-import 'package:dailyremember/presentation/auth/login/widget/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';

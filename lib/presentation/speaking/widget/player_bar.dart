@@ -1,6 +1,5 @@
 import 'package:dailyremember/components/progressbar.dart';
 import 'package:dailyremember/infrastructure/theme/typography.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

@@ -11,7 +11,6 @@ import 'package:dailyremember/domain/core/model/word_param.dart';
 import 'package:dailyremember/infrastructure/theme/typography.dart';
 import 'package:dailyremember/presentation/home/widget/add_target.dart';
 import 'package:dailyremember/presentation/home/widget/detail_word.dart';
-import 'package:dailyremember/presentation/home/widget/dialog_confirmation_remembered.dart';
 import 'package:dailyremember/utils/extension/get_beetwen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

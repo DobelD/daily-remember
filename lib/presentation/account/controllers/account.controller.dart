@@ -1,4 +1,6 @@
 import 'package:dailyremember/domain/core/interfaces/auth_repository.dart';
+import 'package:dailyremember/domain/core/interfaces/progress_repository.dart';
+import 'package:dailyremember/domain/core/model/progress_model.dart';
 import 'package:dailyremember/domain/core/model/user_model.dart';
 import 'package:dailyremember/infrastructure/navigation/routes.dart';
 import 'package:dailyremember/utils/preference/app_preference.dart';
@@ -9,10 +11,12 @@ enum AccountStatus { initial, loading, success, failed }
 
 class AccountController extends GetxController {
   final AuthRepository _authRepository;
-  AccountController(this._authRepository);
+  final ProgressRepository _progressRepository;
+  AccountController(this._authRepository, this._progressRepository);
 
   var accountStatus = Rx<AccountStatus>(AccountStatus.initial);
   var userProfile = UserModel();
+  var progressUser = ProgressModel();
 
   late CacheManager customCacheManager;
 
@@ -33,9 +37,18 @@ class AccountController extends GetxController {
     }
   }
 
+  Future<void> getProgress() async {
+    final res = await _progressRepository.getProgress();
+    if (res != null) {
+      progressUser = res;
+      update();
+    }
+  }
+
   @override
   void onInit() {
     getUserProfile();
+    getProgress();
     customCacheManager = CacheManager(Config('customCacheKey',
         stalePeriod: 15.days, maxNrOfCacheObjects: 100));
     super.onInit();

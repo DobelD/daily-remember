@@ -8,6 +8,7 @@ import '../../../../presentation/main_page/controllers/main_page.controller.dart
 import '../../../../presentation/progress/controllers/progress.controller.dart';
 import '../../../../presentation/speaking/controllers/speaking.controller.dart';
 import '../../../dal/repository/auth_repository.dart';
+import '../../../dal/repository/progress_repository_impl.dart';
 import '../../../dal/repository/word_repository_impl.dart';
 
 class MainPageControllerBinding extends Bindings {
@@ -29,7 +30,7 @@ class MainPageControllerBinding extends Bindings {
       () => ProgressController(),
     );
     Get.lazyPut<AccountController>(
-      () => AccountController(AuthRepositoryImpl()),
+      () => AccountController(AuthRepositoryImpl(), ProgressRepositoryImpl()),
     );
   }
 }

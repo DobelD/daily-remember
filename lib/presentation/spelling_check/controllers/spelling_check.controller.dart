@@ -1,5 +1,4 @@
 import 'package:dailyremember/components/app_button.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
