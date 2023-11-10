@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1015376401855",
+    "project_id": "daily-remember",
+    "storage_bucket": "daily-remember.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1015376401855:android:4b75787abac8215941fd0a",
+        "android_client_info": {
+          "package_name": "com.dailyremember"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDVXllvZsAlJ5Z4do5CsD0cr-pGV2qRrQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
