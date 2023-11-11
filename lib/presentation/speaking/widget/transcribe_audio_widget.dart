@@ -5,6 +5,8 @@ import 'package:dailyremember/presentation/speaking/controllers/speaking.control
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../infrastructure/dal/repository/speaking_repository_impl.dart';
+
 class TranscribeAudioWidget extends StatelessWidget {
   const TranscribeAudioWidget({super.key, required this.transcribe});
   final String transcribe;
@@ -12,7 +14,8 @@ class TranscribeAudioWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<SpeakingController>(
-        init: SpeakingController(TranscribeRepositoryImpl()),
+        init: SpeakingController(
+            TranscribeRepositoryImpl(), SpeakingRepositoryImpl()),
         builder: (controller) {
           return AppBottomSheet(
               title: "Transcribe Audio",

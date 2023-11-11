@@ -15,21 +15,12 @@ class SpeakingScreen extends GetView<SpeakingController> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(
-            'Speaking',
-            style: whiteHeaderBold,
-          ),
-          backgroundColor: Colors.blueAccent,
-          elevation: 1,
-          actions: [
-            IconButton(
-                onPressed: () => controller.openDialogTarget(),
-                icon: const Icon(
-                  Icons.track_changes_outlined,
-                  color: Colors.white,
-                ))
-          ],
-        ),
+            title: Text(
+              'Speaking',
+              style: whiteHeaderBold,
+            ),
+            backgroundColor: Colors.blueAccent,
+            elevation: 1),
         floatingActionButton: Obx(() {
           return SpeedDial(
             icon: controller.isOpenFloating.value
@@ -54,7 +45,8 @@ class SpeakingScreen extends GetView<SpeakingController> {
                   backgroundColor: Colors.white,
                   label: "Speaking Timer",
                   labelStyle: subTitleNormal,
-                  onTap: () => Get.toNamed(Routes.SPEAKING_TIMER)),
+                  onTap: () => Get.toNamed(Routes.SPEAKING_TIMER,
+                      arguments: controller.speakingData.length)),
               SpeedDialChild(
                   child:
                       const Icon(IconlyLight.voice_2, color: Colors.blueAccent),

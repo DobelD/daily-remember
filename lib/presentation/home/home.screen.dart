@@ -36,14 +36,6 @@ class HomeScreen extends GetView<HomeController> {
                   elevation: 1,
                   floating: true,
                   pinned: true,
-                  actions: [
-                    IconButton(
-                        onPressed: () => controller.openDialogTarget(),
-                        icon: const Icon(
-                          Icons.track_changes_outlined,
-                          color: Colors.blueAccent,
-                        ))
-                  ],
                   bottom: TabBar(
                     labelStyle: hintTitleNormal,
                     labelColor:

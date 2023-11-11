@@ -19,7 +19,7 @@ class ListRecording extends StatelessWidget {
       child: RefreshIndicator(
         onRefresh: () async {
           await Future.delayed(2.seconds, () {
-            controller.loadSpeakingData();
+            controller.getData();
           });
         },
         child: SingleChildScrollView(
@@ -29,8 +29,9 @@ class ListRecording extends StatelessWidget {
                 children:
                     List.generate(controller.speakingData.length, (index) {
               final data = controller.speakingData[index];
-              final isDifferentDate = data.createdAt.dateOnly != currentDate;
-              currentDate = data.createdAt.dateOnly;
+              final isDifferentDate =
+                  data.createdAt!.toFormattedDate() != currentDate;
+              currentDate = data.createdAt!.toFormattedDate();
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -38,13 +39,15 @@ class ListRecording extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       child: Text(
-                        currentDate.toFormattedDate(),
+                        currentDate,
                         style: subTitleNormal,
                       ),
                     ),
                   Padding(
                       padding: EdgeInsets.only(
-                        bottom: index == controller.box.length - 1 ? 82 : 0,
+                        bottom: index == controller.speakingData.length - 1
+                            ? 82
+                            : 0,
                       ),
                       child: Card(
                         elevation: 4,
@@ -54,14 +57,18 @@ class ListRecording extends StatelessWidget {
                         ),
                         child: ListTile(
                           onLongPress: () {
-                            controller.deleteSpeaking(
-                                index, data.audioPath, data.idTranscript);
+                            controller.deleteSpeaking(data.id ?? 0,
+                                data.audioPath ?? '', data.idTranscript ?? '');
                           },
                           onTap: () {
-                            controller.openTranscribe(data.idTranscript);
+                            controller.openTranscribe(
+                                data.id ?? 0,
+                                data.idTranscript ?? '',
+                                data.transcript,
+                                index);
                           },
                           title: Text(
-                            data.title,
+                            data.title ?? '',
                             style: titleNormal,
                           ),
                           subtitle: Text(
@@ -72,7 +79,7 @@ class ListRecording extends StatelessWidget {
                             return IconButton(
                               onPressed: () {
                                 controller.openPlayingBar(
-                                    data.audioPath, index);
+                                    data.audioPath ?? '', index);
                               },
                               icon: Icon(
                                 IconlyBold.volume_up,

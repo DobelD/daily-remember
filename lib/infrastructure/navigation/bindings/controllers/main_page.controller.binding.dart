@@ -9,6 +9,7 @@ import '../../../../presentation/progress/controllers/progress.controller.dart';
 import '../../../../presentation/speaking/controllers/speaking.controller.dart';
 import '../../../dal/repository/auth_repository.dart';
 import '../../../dal/repository/progress_repository_impl.dart';
+import '../../../dal/repository/speaking_repository_impl.dart';
 import '../../../dal/repository/word_repository_impl.dart';
 
 class MainPageControllerBinding extends Bindings {
@@ -24,7 +25,8 @@ class MainPageControllerBinding extends Bindings {
       () => DictionaryController(),
     );
     Get.lazyPut<SpeakingController>(
-      () => SpeakingController(TranscribeRepositoryImpl()),
+      () => SpeakingController(
+          TranscribeRepositoryImpl(), SpeakingRepositoryImpl()),
     );
     Get.lazyPut<ProgressController>(
       () => ProgressController(),

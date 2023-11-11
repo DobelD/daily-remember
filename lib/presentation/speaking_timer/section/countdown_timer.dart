@@ -1,11 +1,10 @@
 import 'package:avatar_glow/avatar_glow.dart';
+import 'package:dailyremember/infrastructure/dal/repository/speaking_repository_impl.dart';
 import 'package:dailyremember/infrastructure/theme/typography.dart';
 import 'package:dailyremember/presentation/speaking_timer/controllers/speaking_timer.controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-
-import '../../../infrastructure/dal/repository/transcribe_repository_impl.dart';
 
 class CountDownTimer extends StatelessWidget {
   const CountDownTimer({super.key});
@@ -13,7 +12,7 @@ class CountDownTimer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller =
-        Get.put(SpeakingTimerController(TranscribeRepositoryImpl()));
+        Get.put(SpeakingTimerController(SpeakingRepositoryImpl()));
     return Center(
       child: Container(
         child: Obx(() {

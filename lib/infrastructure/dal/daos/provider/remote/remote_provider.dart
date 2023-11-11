@@ -20,6 +20,6 @@ class RemoteProvider {
   static void init() {
     _dio.interceptors.add(headerInterceptor());
     _dio.interceptors.add(timeoutInterceptor());
-    _dio.interceptors.add(prettyLogger());
+    // _dio.interceptors.add(prettyLogger());
   }
 }

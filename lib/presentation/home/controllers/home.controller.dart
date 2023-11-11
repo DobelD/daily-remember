@@ -262,20 +262,7 @@ class HomeController extends GetxController {
   }
 
   void openDialogTarget() {
-    final target = box.read('target-vocab');
-    targetController = TextEditingController(text: target);
-    Get.defaultDialog(
-        title: "Buat target hafalan harian!",
-        titleStyle: titleBold,
-        radius: 8,
-        content: AddTarget(
-          onPressed: () {
-            box.write('target-vocab', targetController.text);
-            Get.back();
-          },
-        )).whenComplete(() {
-      targetController.clear();
-    });
+    // final target = box.read('target-vocab');
   }
 
   Future<void> playAudio(String name, int index) async {

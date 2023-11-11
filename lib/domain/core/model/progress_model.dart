@@ -6,6 +6,7 @@ class ProgressModel {
   int? targetDay;
   int? targetRememberPerday;
   int? achieved;
+  int? runningDay;
 
   ProgressModel(
       {this.userId,
@@ -14,7 +15,8 @@ class ProgressModel {
       this.noRemember,
       this.targetDay,
       this.targetRememberPerday,
-      this.achieved});
+      this.achieved,
+      this.runningDay});
 
   ProgressModel.fromJson(Map<String, dynamic> json) {
     userId = json['user_id'];
@@ -24,6 +26,7 @@ class ProgressModel {
     targetDay = json['target_day'];
     targetRememberPerday = json['target_remember_perday'];
     achieved = json['achieved'];
+    runningDay = json['running_day'];
   }
 
   Map<String, dynamic> toJson() {
@@ -35,6 +38,7 @@ class ProgressModel {
     data['target_day'] = targetDay;
     data['target_remember_perday'] = targetRememberPerday;
     data['achieved'] = achieved;
+    data['running_day'] = runningDay;
     return data;
   }
 }

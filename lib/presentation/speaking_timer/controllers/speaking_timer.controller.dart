@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
+import 'package:dailyremember/infrastructure/dal/repository/speaking_repository_impl.dart';
 import 'package:dailyremember/presentation/speaking/controllers/speaking.controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,8 +12,9 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import '../../../components/app_snackbar.dart';
 import '../../../components/waiting_progress.dart';
-import '../../../domain/core/interfaces/transcribe_repository.dart';
+import '../../../domain/core/interfaces/speaking_repository.dart';
 import '../../../domain/core/model/local_storage/speaking_model.dart';
+import '../../../domain/core/model/params/speaking_param.dart';
 import '../../../infrastructure/dal/repository/transcribe_repository_impl.dart';
 import '../../../infrastructure/theme/typography.dart';
 import '../widget/save_dialog.dart';
@@ -20,8 +22,8 @@ import '../widget/save_dialog.dart';
 enum SpeakingTimerStatus { initial, loading, waiting, success, failed }
 
 class SpeakingTimerController extends GetxController {
-  final TranscribeRepository _transcribeRepository;
-  SpeakingTimerController(this._transcribeRepository);
+  final SpeakingRepository _speakingRepository;
+  SpeakingTimerController(this._speakingRepository);
 
   var speakingTimeStatus = Rx<SpeakingTimerStatus>(SpeakingTimerStatus.initial);
 
@@ -79,7 +81,7 @@ class SpeakingTimerController extends GetxController {
     final hasPermission = await recordController.checkPermission();
     if (hasPermission) {
       Directory appDocDirectory = await getApplicationDocumentsDirectory();
-      String fileName = 'speaking-${box.values.length + 1}.wav';
+      String fileName = 'speaking-${Get.arguments + 1}.wav';
       currentRecordingPath = '${appDocDirectory.path}/$fileName';
       await recordController.record(
           path: currentRecordingPath, bitRate: 256000);
@@ -153,10 +155,14 @@ class SpeakingTimerController extends GetxController {
       recordController.stop();
       Get.back();
       WaitingProgress.init(title: 'Saving record processed');
-      final idTranscribe = await _transcribeRepository.transcribeAudio(
-          currentRecordingPath ?? '', titleController.text);
-      if (idTranscribe != null) {
-        await addToLocalStorage(idTranscribe);
+      var param = SpeakingParam(
+        title: titleController.text,
+        audioPath: currentRecordingPath,
+        duration: saveDurationSpeaking.value,
+      );
+
+      final res = await _speakingRepository.createdSpeaking(param);
+      if (res != null) {
         // Bersihkan nilai saat ini
         titleController.clear();
         currentRecordingPath = null;
@@ -173,30 +179,10 @@ class SpeakingTimerController extends GetxController {
     }
   }
 
-  Future<void> addToLocalStorage(String id) async {
-    var box = await Hive.openBox<SpeakingModel>('speakings');
-    var speakingModel = SpeakingModel(
-        titleController.text,
-        currentRecordingPath ?? '',
-        saveDurationSpeaking.value,
-        id,
-        "",
-        DateTime.timestamp().toString());
-    box.add(speakingModel);
-    // ignore: avoid_print
-    print("Rekaman disimpan.");
-  }
-
   refreshDataSpeaking() {
-    final speakingController =
-        Get.put(SpeakingController(TranscribeRepositoryImpl()));
-    speakingController.loadSpeakingData();
-  }
-
-  @override
-  void onInit() {
-    box = Hive.box<SpeakingModel>('speakings');
-    super.onInit();
+    final speakingController = Get.put(SpeakingController(
+        TranscribeRepositoryImpl(), SpeakingRepositoryImpl()));
+    speakingController.getData();
   }
 
   @override
